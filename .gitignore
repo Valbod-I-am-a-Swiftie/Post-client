@@ -1,0 +1,6 @@
+./Spring-test/build*
+./Spring-test/bin*
+./Spring-test/.classpath
+./Spring-test/.project
+./Spring-test/.gradle
+./Spring-test/.settings
