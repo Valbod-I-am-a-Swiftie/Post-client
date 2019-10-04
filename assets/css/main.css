@@ -1,16 +1,17 @@
+body{
+  margin: 0;
+}
+
 header{
   height: 80px;
   display: flex;
   justify-content: center;
   flex-direction: column;
 
+  margin: 10px 0;
+
   /* background-color: #333; */
 }
-
-header::after{
-
-}
-
 svg{
   margin: auto 20px;
   align-items: center;
