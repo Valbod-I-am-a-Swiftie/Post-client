@@ -4,3 +4,8 @@
 ./Spring-test/.project
 ./Spring-test/.gradle
 ./Spring-test/.settings
+Spring-server/.gradle/
+Spring-server/.idea/
+*.iml
+Spring-server/build/
+Spring-server/src/main/resources/public
