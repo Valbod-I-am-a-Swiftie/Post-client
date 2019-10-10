@@ -13,8 +13,8 @@ apply plugin: 'io.spring.dependency-management'
 
 task copyFront{
         copy {
-            from '/../assets'
-            into '/src/main/resources/public'
+            from '../assets'
+            into 'src/main/resources/public'
         }
 }
 
@@ -32,6 +32,8 @@ repositories {
 
 sourceCompatibility = 11
 targetCompatibility = 11
+
+ext['tomcat.version'] = '9.0.24'
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
