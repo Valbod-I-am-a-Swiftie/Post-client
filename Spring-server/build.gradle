@@ -13,14 +13,14 @@ apply plugin: 'io.spring.dependency-management'
 
 task copyFront{
         copy {
-            from '/../assets'
-            into '/src/main/resources/public'
+            from '../assets'
+            into 'src/main/resources/public'
         }
 }
 
 bootJar {
-    baseName = 'gs-spring-boot'
-    version = '0.1.0'
+    baseName = 'post-client'
+    version = '0.0.1'
     classifier = 'boot'
 }
 
@@ -33,7 +33,10 @@ repositories {
 sourceCompatibility = 11
 targetCompatibility = 11
 
+ext['tomcat.version'] = '9.0.24'
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    // compile("org.springframework.boot:spring-boot-starter-security")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
