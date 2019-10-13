@@ -2,7 +2,6 @@ package hello;
 
 import java.util.List;
 
-// import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +37,7 @@ public class HelloController {
     	return repository.save(newUser);
  	}
 
- 	// this one doesn't work correct :c
+ 	// this one doesn't work correctly :c
  	@PutMapping("/users/{id}")
  	User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
 
