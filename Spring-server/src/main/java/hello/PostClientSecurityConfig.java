@@ -17,7 +17,7 @@ public class PostClientSecurityConfig {
     public ServletWebServerFactory servletContainer() {
         UndertowServletWebServerFactory undertow = new UndertowServletWebServerFactory();
         undertow.addBuilderCustomizers(builder -> {
-            builder.addHttpListener(httpPort, "0.0.0.0");
+            builder.addHttpListener(httpPort, address);
             builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
         });
         undertow.addDeploymentInfoCustomizers(deploymentInfo -> {
@@ -36,4 +36,7 @@ public class PostClientSecurityConfig {
 
     @Value("${server.port}")
     int httpsPort;
+
+    @Value("${server.address}")
+    String address;
 }
