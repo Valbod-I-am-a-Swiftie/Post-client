@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
+// import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -42,22 +42,22 @@ public class HelloController {
  	User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
 
     return repository.findById(id)
-      .map(user -> {
-        user.setLogin(newUser.getLogin());
-        user.setPassword(newUser.getPassword());
-        user.setMailLogin(newUser.getMailLogin());
-        user.setMailPassword(newUser.getMailPassword());
-        user.setSmtpAddr(newUser.getSmtpAddr());
-        user.setSmtpPort(newUser.getSmtpPort());
-        user.setImapAddr(newUser.getImapAddr());
-        user.setImapPort(newUser.getImapPort());
+        .map(user -> {
+            user.setLogin(newUser.getLogin());
+            user.setPassword(newUser.getPassword());
+            user.setMailLogin(newUser.getMailLogin());
+            user.setMailPassword(newUser.getMailPassword());
+            user.setSmtpAddr(newUser.getSmtpAddr());
+            user.setSmtpPort(newUser.getSmtpPort());
+            user.setImapAddr(newUser.getImapAddr());
+            user.setImapPort(newUser.getImapPort());
 
-        return repository.save(user);
-      })
-      .orElseGet(() -> {
-        newUser.setId(id);
-        return repository.save(newUser);
-      });
+            return repository.save(user);
+        })
+        .orElseGet(() -> {
+            newUser.setId(id);
+            return repository.save(newUser);
+        });
   	}
 
   	@PostMapping("/users/{id}")
