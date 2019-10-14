@@ -8,6 +8,7 @@ import javax.persistence.Id;
 class User {
 	private @Id @GeneratedValue Long id;
 	private String login;
+	private String password;
 	private String mailLogin;
 	private String mailPassword;
 	private String smtpAddr;
@@ -17,9 +18,10 @@ class User {
 
 	User() {}
 
-	User(String login, String mailLogin, String mailPassword, String smtpAddr, int smtpPort,
+	User(String login, String password, String mailLogin, String mailPassword, String smtpAddr, int smtpPort,
 			String imapAddr, int imapPort) {
 		this.login = login;
+		this.password = password;
 		this.mailLogin = mailLogin;
 		this.mailPassword = mailPassword;
 		this.smtpAddr = smtpAddr;
@@ -42,6 +44,14 @@ class User {
 
 	public String getLogin() {
 		return this.login;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPassword() {
+		return this.password;
 	}
 
 	public void setMailLogin(String mailLogin) {
