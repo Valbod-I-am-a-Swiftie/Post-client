@@ -30,20 +30,22 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 configurations {
     compile.exclude module: "spring-boot-starter-tomcat"
 }
+
+// ext['tomcat.version'] = '9.0.24'
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile 'org.springframework.boot:spring-boot-starter-undertow'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
-    // compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.security:spring-security-web'
-    compile 'org.springframework.security:spring-security-config'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    // compile 'org.springframework.security:spring-security-web'
+    // compile 'org.springframework.security:spring-security-config'
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
