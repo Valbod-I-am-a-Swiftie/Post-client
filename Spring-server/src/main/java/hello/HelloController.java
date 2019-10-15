@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RestController
 public class HelloController {
 
-    // protected final UserRepository repository;
+    protected final UserRepository repository;
 
-	// HelloController(UserRepository repository) {
-    //     this.repository = repository;
-	// }
+	HelloController(UserRepository repository) {
+        this.repository = repository;
+	}
 
     @RequestMapping("/greetings")
     @ResponseBody
@@ -34,10 +34,10 @@ public class HelloController {
         return "Privet";
     }
 
-	// @GetMapping("/users")
-  	// List<User> all() {
-    // 	return repository.findAll();
-  	// }
+	@GetMapping("/all")
+  	public List<User> all() {
+    	return repository.findAll();
+  	}
 
   	// @PostMapping("/users")
   	// User newUser(@RequestBody User newUser) {

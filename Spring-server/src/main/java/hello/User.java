@@ -1,5 +1,9 @@
 package hello;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,10 +20,14 @@ class User {
 	private String imapAddr;
 	private int imapPort;
 
+	private int active;
+	private String roles = "";
+	private String permissions = "";
+
 	User() {}
 
 	User(String login, String password, String mailLogin, String mailPassword, String smtpAddr, int smtpPort,
-			String imapAddr, int imapPort) {
+			String imapAddr, int imapPort, String roles, String permissions) {
 		this.login = login;
 		this.password = password;
 		this.mailLogin = mailLogin;
@@ -28,6 +36,10 @@ class User {
 		this.smtpPort = smtpPort;
 		this.imapAddr = imapAddr;
 		this.imapPort = imapPort;
+
+		this.active = 1;
+		this.roles = roles;
+		this.permissions = permissions;
 	}
 
 	public void setId(Long id) {
@@ -100,5 +112,31 @@ class User {
 
 	public int getImapPort() {
 		return this.imapPort;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public String getPermissions() {
+		return permissions;
+	}
+
+	public List<String> getRoleList() {
+		if (this.roles.length() > 0) {
+			return Arrays.asList(this.roles.split(","));
+		}
+		return new ArrayList<>();
+	}
+
+	public List<String> getPermissionsList() {
+		if (this.permissions.length() > 0) {
+			return Arrays.asList(this.permissions.split(","));
+		}
+		return new ArrayList<>();
 	}
 }

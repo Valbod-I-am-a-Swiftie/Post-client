@@ -1,21 +1,40 @@
-// package hello;
+package hello;
 
-// import org.springframework.boot.CommandLineRunner;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
+import java.util.Arrays;
+import java.util.List;
 
-// @Configuration
-// class LoadDatabase {
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
-//     static UserRepository userRepository;
+@Service
+class LoadDatabase implements CommandLineRunner {
 
-//     @Bean
-//     CommandLineRunner initDatabase(UserRepository repository) {
-//         userRepository = repository;
-//         return args -> {
-//             repository.save(new User("sample", "pass", "sample@gmail.com", "qwerty", "smtp.google.com", 883, 
-//       		    "imap.google.com", 666));
-//         };
-//     }
+    private UserRepository userRepository;
 
-// }
+    public LoadDatabase(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    // @Bean
+    // CommandLineRunner initDatabase(UserRepository repository) {
+    //     userRepository = repository;
+    //     return args -> {
+    //         repository.save(new User("sample", "pass", "sample@gmail.com", "qwerty", "smtp.google.com", 883, 
+    //   		    "imap.google.com", 666, "USER", ""));
+    //     };
+    // }
+
+    @Override
+    public void run(String... args) {
+        User user1 = new User("sample", "pass", "sample@gmail.com", "qwerty", "smtp.google.com", 883, 
+                "imap.google.com", 666, "USER", "");
+        User admin = new User("admin", "admin123", "admin@gmail.com", "123456", "smtp.google.com", 883, 
+                "imap.google.com", 666, "USER", "");
+        
+        List<User> users = Arrays.asList(user1, admin);
+
+        this.userRepository.saveAll(users);
+    }
+}
