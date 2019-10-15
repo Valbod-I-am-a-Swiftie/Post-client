@@ -10,9 +10,20 @@ import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFa
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
 public class PostClientSecurityConfig {
+
+    @Value("${server.port.http}")
+    int httpPort;
+
+    @Value("${server.port}")
+    int httpsPort;
+
+    @Value("${server.address}")
+    String address;
+
     @Bean
     public ServletWebServerFactory servletContainer() {
         UndertowServletWebServerFactory undertow = new UndertowServletWebServerFactory();
@@ -30,13 +41,4 @@ public class PostClientSecurityConfig {
         });
         return undertow;
     }
-
-    @Value("${server.port.http}")
-    int httpPort;
-
-    @Value("${server.port}")
-    int httpsPort;
-
-    @Value("${server.address}")
-    String address;
 }

@@ -7,11 +7,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class LoadDatabase {
 
+    static UserRepository userRepository;
+
     @Bean
     CommandLineRunner initDatabase(UserRepository repository) {
+        userRepository = repository;
         return args -> {
-        repository.save(new User("sample", "pass", "sample@gmail.com", "qwerty", "smtp.google.com", 883, 
-      		"imap.google.com", 666));
+            repository.save(new User("sample", "pass", "sample@gmail.com", "qwerty", "smtp.google.com", 883, 
+      		    "imap.google.com", 666));
         };
     }
+
 }
