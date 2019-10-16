@@ -18,3 +18,9 @@ function login() {
     alert('error input');
   }
 }
+
+function goToPage() {
+  var url = 'https://localhost:8443/API/all';
+  console.log(url);
+  document.location.href = url;
+}
