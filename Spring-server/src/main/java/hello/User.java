@@ -9,9 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-class User {
+public class User {
 	private @Id @GeneratedValue Long id;
-	private String login;
+	private String username;
 	private String password;
 	private String mailLogin;
 	private String mailPassword;
@@ -26,9 +26,9 @@ class User {
 
 	User() {}
 
-	User(String login, String password, String mailLogin, String mailPassword, String smtpAddr, int smtpPort,
+	User(String username, String password, String mailLogin, String mailPassword, String smtpAddr, int smtpPort,
 			String imapAddr, int imapPort, String roles, String permissions) {
-		this.login = login;
+		this.username = username;
 		this.password = password;
 		this.mailLogin = mailLogin;
 		this.mailPassword = mailPassword;
@@ -50,12 +50,12 @@ class User {
 		return this.id;
 	}
 
-	public void setLogin(String lgn) {
-		this.login = lgn;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public String getLogin() {
-		return this.login;
+	public String getUsername() {
+		return this.username;
 	}
 
 	public void setPassword(String password) {
@@ -133,7 +133,7 @@ class User {
 		return new ArrayList<>();
 	}
 
-	public List<String> getPermissionsList() {
+	public List<String> getPermissionList() {
 		if (this.permissions.length() > 0) {
 			return Arrays.asList(this.permissions.split(","));
 		}
