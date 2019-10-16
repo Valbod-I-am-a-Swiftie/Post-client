@@ -30,12 +30,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .anyRequest().authenticated()
-            .and()
-            .httpBasic();
+                .antMatchers("/API/*").authenticated()
+                .regexMatchers("^(?!API\\/\\S*)\\S*").permitAll()
+                .and()
+                .httpBasic();
     }
 
     @Bean

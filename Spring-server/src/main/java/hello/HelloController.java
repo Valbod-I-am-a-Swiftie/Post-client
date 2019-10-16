@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.context.annotation.Bean;
 
 @RestController
+@RequestMapping("/API")
 public class HelloController {
 
     protected final UserRepository repository;
@@ -26,12 +27,6 @@ public class HelloController {
     @ResponseBody
     public String get() {
         return "Greetings";
-    }
-
-    @RequestMapping("/")
-    @ResponseBody
-    public String getHello() {
-        return "Privet";
     }
 
 	@GetMapping("/all")
