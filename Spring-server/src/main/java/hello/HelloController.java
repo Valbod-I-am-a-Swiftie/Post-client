@@ -57,9 +57,6 @@ public class HelloController {
 		IMAPConnector imapConnector = new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
 		imapConnector.deleteMessage(message);
 	}
-    HelloController(UserRepository repository) {
-        this.repository = repository;
-    }
 
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such user")
