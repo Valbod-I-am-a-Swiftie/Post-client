@@ -1,17 +1,44 @@
 package hello;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class SMTPConnector {
     private static String SMTPS_PORT = "465";
+
+
+    static {
+        SSLContext ctx = null;
+        try {
+            ctx = SSLContext.getInstance("TLS");
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(e.toString());
+        }
+        try {
+            ctx.init(new KeyManager[0], new TrustManager[] {new SMTPConnector.DefaultTrustManager()}, new SecureRandom());
+        } catch (KeyManagementException e) {
+            System.out.println(e.toString());
+        }
+        SSLContext.setDefault(ctx);
+    }
+
     public Session SMTPSession;
     SMTPConnector(String userName, String password, String host) throws Exception {
         this.SMTPSession = this.getSMTPSession( userName, password, host);
+        SMTPSession.setDebug(true);
+        SMTPSession.setDebugOut(System.out);
     }
+
     public Session getSMTPSession(String userName, String password, String host) throws Exception {
 
         if(userName == null){
@@ -21,6 +48,7 @@ public class SMTPConnector {
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", SMTPS_PORT);
         properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.ssl.enable", "true"   );
         properties.put("mail.smtp.socketFactory.port", SMTPS_PORT);
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
@@ -34,21 +62,22 @@ public class SMTPConnector {
         return SMTPSession;
     }
 
-    public void sendEmail(Session SMTPSession, String from, String to){
-        try {
-            MimeMessage message = new MimeMessage(SMTPSession);        // email message
-            message.setFrom(new InternetAddress(from));                    // setting header fields
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Тестовое письмо от мега почтового клиента(еее-рок!)"); // subject line
-
-            // actual mail body
-            message.setText("Привет ${UserName}, чмок тебя в пупочек:*");
-
-            // Send message
-            Transport.send(message);
+    public void sendEmail(PostMessage message) throws MessagingException {
+            Message email = message.toMessage(SMTPSession);
+            System.out.println("Email converted");
+            Transport.send(email);
             System.out.println("Email Sent successfully....");
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
+    }
+
+    private static class DefaultTrustManager implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws
+                CertificateException {}
+        @Override
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
         }
     }
 }

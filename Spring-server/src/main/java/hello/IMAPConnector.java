@@ -1,10 +1,12 @@
 package hello;
 
 import javax.mail.*;
+import javax.mail.internet.MimeMessage;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -16,7 +18,8 @@ import java.util.Properties;
 
 public class IMAPConnector {
     private static String IMAPS_PORT = "993";
-    public Store store;
+    private Session session;
+    private Store store;
 
     static {
         SSLContext ctx = null;
@@ -35,7 +38,8 @@ public class IMAPConnector {
 
     IMAPConnector(String login, String password, String host) throws Exception {
 
-        this.store = this.getIMAPSession(login, password).getStore();
+        this.session = getIMAPSession(login, password);
+        this.store = this.session.getStore();
         store.connect( host,Integer.parseInt(IMAPS_PORT),login, password);
     }
 
@@ -58,15 +62,54 @@ public class IMAPConnector {
         return sessionIMAP;
     }
 
-    List<String> getMailList() throws MessagingException {
-        Folder inbox = this.store.getFolder("INBOX");
-        inbox.open(Folder.READ_ONLY);
-        Message[] messages = inbox.getMessages();
-        List<String> mailList = new ArrayList<>();
-        for (var message : messages){
-            mailList.add(message.getSubject());
+    public List<String> getFolders() throws MessagingException {
+        return getAllFolders(this.store.getDefaultFolder());
+    }
+
+    private List<String> getAllFolders(Folder folder) throws MessagingException {
+        List<String> folders = new ArrayList<>(){{add(folder.getFullName());}};
+        for (var nested: folder.list()){
+            folders.addAll(getAllFolders(nested));
         }
-        return mailList;
+        return folders;
+    }
+
+    List<PostMessage> getMailList(String folderName) throws MessagingException, IOException {
+
+        Folder folder = this.store.getFolder(folderName);
+        if (folder.exists())
+        {
+            folder.open(Folder.READ_ONLY);
+
+            Message[] messages = folder.getMessages();
+            List<PostMessage> ret = new ArrayList<>();
+
+            for (Message message:messages) {
+                ret.add(new PostMessage(message));
+            }
+            return ret;
+        }
+        return new ArrayList<>();
+    }
+
+    public void saveSendMessage(PostMessage message) throws MessagingException {
+        Folder folder = this.store.getFolder("SentBox");
+        folder.open(Folder.READ_WRITE);
+        Message email = message.toMessage(session);
+        folder.appendMessages(new Message[]{email});
+    }
+
+    public void deleteMessage(PostMessage message) throws MessagingException {
+        Folder folder = store.getFolder(message.getFolder());
+        folder.open(Folder.READ_WRITE);
+        Message email = folder.getMessage(message.getNumberInFolder());
+        if (!message.getFolder().equals("Trash")){
+            Folder trashFolder = store.getFolder("Trash");
+            trashFolder.open(Folder.READ_WRITE);
+            folder.copyMessages(new Message[] {email}, trashFolder);
+        }
+        email.setFlag(Flags.Flag.DELETED, true);
+        folder.expunge();
     }
 
     private static class DefaultTrustManager implements X509TrustManager {
