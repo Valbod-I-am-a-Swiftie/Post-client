@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap');
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  background-color: #adadad;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 200px;
+}
+
+input {
+  outline: none;
+  border: none;
+}
+
+.p-r-85 {
+  padding-right: 85px;
+}
+
+.p-l-85 {
+  padding-left: 85px;
+}
+
+.p-b-55 {
+  padding-bottom: 55px;
+}
+
+.p-t-55 {
+  padding-top: 55px;
+}
+
+.auth-container {
+  width: 560px;
+  background: #ffffff;
+  border-radius: 10px;
+  position: relative;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.auth-title {
+  background-color: #ffffff;
+  color: #555;
+
+  font-size: 30px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-align: left;
+  width: 100%;
+  display: block;
+  padding-bottom: 32px;
+}
+
+.ttl {
+  font-weight: 600;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+  text-transform: uppercase;
+
+  padding-bottom: 11px;
+}
+
+.input-f {
+  position: relative;
+
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 2px;
+
+  margin-bottom: 36px;
+
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+}
+
+.m-b-12 {
+  margin-bottom: 12px;
+}
+
+.in-us {
+  font-weight: 500;
+  color: #555;
+  line-height: 1.2;
+  font-size: 18px;
+  display: block;
+  width: 100%;
+  background: 0 0;
+  height: 55px;
+  padding: 0 25px;
+  overflow: visible;
+}
+
+.focus-input {
+  position: absolute;
+  display: block;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  top: -1px;
+  left: -1px;
+  pointer-events: none;
+  border: 1px solid #57b846;
+  border-radius: 3px;
+  visibility: hidden;
+  opacity: 0;
+
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+}
+
+.btn-show-pass {
+  font-size: 15px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  padding: 0 5px;
+  height: 100%;
+  top: 0;
+  right: 12px;
+
+  cursor: pointer;
+}
+
+.fa {
+  display: inline-block;
+  font-size: inherit;
+  text-rendering: auto;
+  margin: 0;
+  padding: 0;
+
+  cursor: pointer;
+  float: right;
+}
+
+.fa-eye:before {
+  /* content: "\f06e"; */
+  content: "\f070";
+}
+
+.full-class {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 20px;
+
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+}
+
+.checkbox-form {
+  font-weight: 400;
+  line-height: 1.5;
+
+  display: flex;
+}
+
+.input-checkbox {
+  /* display: none; */
+}
+
+.input-checkbox:checked + .input-checkbox-label {
+  font-weight: 600;
+}
+
+.input-checkbox-label {
+  font-weight: 400;
+  font-size: 13px;
+  color: #999;
+  line-height: 1.4;
+
+  display: block;
+  position: relative;
+  padding-left: 26px;
+  cursor: pointer;
+}
+
+/* .input-checkbox-label:before {
+  content: "\f00c";
+  font-family: FontAwesome;
+  font-size: 13px;
+  color: transpanent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+
+  background: #fff;
+  border: 1px solid #e6e6e6;
+
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+} */
+
+.f-pass {
+  font-weight: 400;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+
+  text-decoration: none;
+  background-color: transpanent;
+}
+
+.container-form-btn {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+}
+
+.form-btn {
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.2;
+  text-transform: uppercase;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 40px;
+  height: 55px;
+  background-color: #333;
+  border-radius: 27px;
+  margin-top: 30px;
+
+  border: none;
+  overflow: visible;
+  outline: none;
+
+  cursor: pointer;
+}
