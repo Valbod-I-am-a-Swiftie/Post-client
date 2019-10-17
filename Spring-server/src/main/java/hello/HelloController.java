@@ -2,7 +2,13 @@ package hello;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
@@ -18,13 +24,28 @@ public class HelloController {
         return "Greetings";
     }
 
-	@RequestMapping("/folders/{id}")
+	@GetMapping("/folders/{id}")
 	public List<String> getFolders(@PathVariable Long id) throws Exception {
 		User user = repository.findById(id).orElse(null);
 		IMAPConnector connector = new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
 		return connector.getFolders();
 	}
 
+	@PostMapping("/mail/{id}")
+	public void sendMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception{
+		User user = repository.findById(id).orElse(null);
+		SMTPConnector smtpConnector = new SMTPConnector(user.getMailLogin(), user.getMailPassword(), user.getSmtpAddr());
+		smtpConnector.sendEmail(message);
+		IMAPConnector imapConnector = new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+		imapConnector.saveSendMessage(message);
+	}
+
+	@GetMapping("/mail/{id}")
+	public List<PostMessage> getMail(@PathVariable Long id) throws Exception{
+		User user = repository.findById(id).orElse(null);
+		IMAPConnector imapConnector = new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+		return imapConnector.getMailList("INBOX");
+	}
 
 	@GetMapping("/users")
   	List<User> all() {

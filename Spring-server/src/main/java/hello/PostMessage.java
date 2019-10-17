@@ -1,6 +1,10 @@
 package hello;
 
+import java.util.Arrays;
 import javax.mail.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,21 +17,21 @@ public class PostMessage {
     private Object content;
     private String contentType;
     private Date date;
-    private Address[] recivers;
-    private Address[] recipients;
+    private String[] from;
+    private String[] recipients;
     private String folder;
 
 
 
 
-    public PostMessage(String title, String content, String contentType, Date date, Address[] recivers, Address[] recipients, Folder folder) {
+    public PostMessage(String title, String content, String contentType, Date date, String[] from, String[] recipients, String folder) {
         this.title = title;
         this.content = content;
         this.contentType = contentType;
         this.date = date;
-        this.recivers = recivers;
+        this.from = from;
         this.recipients = recipients;
-        this.folder = folder.getFullName();
+        this.folder = folder;
     }
 
     public PostMessage(Message message) throws MessagingException, IOException {
@@ -36,9 +40,21 @@ public class PostMessage {
         this.contentType = message.getContentType();
         this.numberInFolder = message.getMessageNumber();
         this.date = message.getSentDate();
-        this.recivers = message.getFrom();
-        this.recipients = message.getAllRecipients();
+        this.from = mapToString(message.getFrom());
+        this.recipients = mapToString(message.getAllRecipients());
         this.folder = message.getFolder().getFullName();
+    }
+
+    public Message toMessage(Session session) throws MessagingException {
+        Message message = new MimeMessage(session);
+        message.addFrom(mapToAddress(this.from));
+        message.addRecipients(Message.RecipientType.TO, mapToAddress(this.recipients));
+        message.setSubject(this.title);
+        message.setContent(this.content, this.contentType);
+        if (date != null){
+            message.setSentDate(date);
+        }
+        return message;
     }
 
     public String getTitle() {
@@ -103,12 +119,12 @@ public class PostMessage {
         this.date = date;
     }
 
-    public Address[] getRecivers() {
-        return recivers;
+    public String[] getFrom() {
+        return from;
     }
 
-    public void setRecivers(Address[] addresses) {
-        this.recivers = addresses;
+    public void setFrom(String[] addresses) {
+        this.from = addresses;
     }
 
     public int getNumberInFolder() {
@@ -120,11 +136,11 @@ public class PostMessage {
     }
 
 
-    public Address[] getRecipients() {
+    public String[] getRecipients() {
         return recipients;
     }
 
-    public void setRecipients(Address[] recipients) {
+    public void setRecipients(String[] recipients) {
         this.recipients = recipients;
     }
 
@@ -134,5 +150,13 @@ public class PostMessage {
 
     public void setFolder(String folder) {
         this.folder = folder;
+    }
+
+    private String[] mapToString(Address[] array){
+        return InternetAddress.toUnicodeString(array).split(",");
+    }
+
+    private Address[] mapToAddress(String[] array) throws AddressException {
+        return InternetAddress.parse(String.join(",",array));
     }
 }

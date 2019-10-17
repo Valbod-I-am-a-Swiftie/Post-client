@@ -92,19 +92,11 @@ public class IMAPConnector {
         return new ArrayList<>();
     }
 
-    public void saveMessage(PostMessage message) throws MessagingException {
+    public void saveSendMessage(PostMessage message) throws MessagingException {
         Folder folder = this.store.getFolder("SentBox");
-        MimeMessage email = new MimeMessage(session);
-
-        //email.setFrom(new InternetAddress(message.));                    // setting header fields
-        email.addRecipients(Message.RecipientType.TO, message.getAddresses());
-        email.setSubject(message.getTitle()); // subject line
-
-        // actual mail body
-        email.setContent(message.getContent(), message.getContentType());
-
-
-
+        folder.open(Folder.READ_WRITE);
+        Message email = message.toMessage(session);
+        folder.appendMessages(new Message[]{email});
     }
 
     private static class DefaultTrustManager implements X509TrustManager {
