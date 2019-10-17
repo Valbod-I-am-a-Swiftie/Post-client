@@ -29,6 +29,7 @@ public class PostMessage {
         this.recipients = recipients;
         this.folder = folder.getFullName();
     }
+
     public PostMessage(Message message) throws MessagingException, IOException {
         this.title = message.getSubject();
         this.content = message.getContent();

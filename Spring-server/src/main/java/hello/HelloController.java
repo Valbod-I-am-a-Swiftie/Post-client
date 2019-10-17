@@ -2,15 +2,7 @@ package hello;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HelloController {
@@ -22,10 +14,17 @@ public class HelloController {
 	}
 
     @RequestMapping("/greetings")
-    @ResponseBody
     public String get() {
         return "Greetings";
     }
+
+	@RequestMapping("/folders/{id}")
+	public List<String> getFolders(@PathVariable Long id) throws Exception {
+		User user = repository.findById(id).orElse(null);
+		IMAPConnector connector = new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+		return connector.getFolders();
+	}
+
 
 	@GetMapping("/users")
   	List<User> all() {
@@ -64,4 +63,5 @@ public class HelloController {
   	void deleteUser(@PathVariable Long id) {
    		repository.deleteById(id);
   	}
+
 }
