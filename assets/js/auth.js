@@ -1,8 +1,6 @@
 var username;
 var password;
 
-// var btnLogin = document.getElementById('btn');
-
 function saveUsername() {
   username = document.getElementById('user').value;
   console.log('username -> ' + username);
