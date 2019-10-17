@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @RestController
 public class HelloController {
@@ -21,26 +25,33 @@ public class HelloController {
 		this.repository = repository;
 	}
 
-    @RequestMapping("/greetings")
-    @ResponseBody
-    public String get() {
-        return "Greetings";
-    }
+  @ExceptionHandler(ResponseStatusException.class)
+  @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such user")
+   String handleException(Exception ex) {
+    return ex.toString();
+  }
 
-	@GetMapping("/users")
+  @GetMapping("/users")
   	List<User> all() {
     	return repository.findAll();
   	}
 
-  	@PostMapping("/users")
-  	User newUser(@RequestBody User newUser) {
-    	return repository.save(newUser);
- 	}
+  @GetMapping("/users/{id}")
+  User uniqueUser(@PathVariable Long id) throws Exception {
+    return repository.findById(id)
+      .orElseThrow(
+        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+  }
+
+	@PostMapping("/users")
+	User newUser(@RequestBody User newUser) {
+  	return repository.save(newUser);
+	}
 
  	// this one doesn't work correctly :c
  	@PutMapping("/users/{id}")
  	User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-
+    //only update, if doesn't exist - abandon
     return repository.findById(id)
       .map(user -> {
         user.setLogin(newUser.getLogin());
@@ -60,7 +71,8 @@ public class HelloController {
       });
   	}
 
-  	@PostMapping("/users/{id}")
+    //
+  	@DeleteMapping("/users/{id}")
   	void deleteUser(@PathVariable Long id) {
    		repository.deleteById(id);
   	}
