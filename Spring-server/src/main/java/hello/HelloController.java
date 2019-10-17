@@ -27,31 +27,34 @@ public class HelloController {
 
   @ExceptionHandler(ResponseStatusException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such user")
-   String handleException(Exception ex) {
+   String handleNotFoundException(ResponseStatusException ex) {
     return ex.toString();
   }
 
-  @GetMapping("/users")
-  	List<User> all() {
-    	return repository.findAll();
-  	}
-
   @GetMapping("/users/{id}")
-  User uniqueUser(@PathVariable Long id) throws Exception {
+  @ResponseStatus(HttpStatus.OK)
+  User uniqueUser(@PathVariable Long id) {
     return repository.findById(id)
       .orElseThrow(
         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
   }
 
+  @GetMapping("/users")
+  @ResponseStatus(HttpStatus.OK)
+  	List<User> all() {
+    	return repository.findAll();
+  	}
+
+
 	@PostMapping("/users")
+  @ResponseStatus(HttpStatus.CREATED)
 	User newUser(@RequestBody User newUser) {
   	return repository.save(newUser);
 	}
 
- 	// this one doesn't work correctly :c
  	@PutMapping("/users/{id}")
+  @ResponseStatus(HttpStatus.OK)
  	User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-    //only update, if doesn't exist - abandon
     return repository.findById(id)
       .map(user -> {
         user.setLogin(newUser.getLogin());
@@ -65,15 +68,23 @@ public class HelloController {
 
         return repository.save(user);
       })
-      .orElseGet(() -> {
-        newUser.setId(id);
-        return repository.save(newUser);
-      });
+      .orElseThrow(
+        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
   	}
 
-    //
+    @DeleteMapping("/users")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    void deleteAllUsers() {
+      // It's forbidden to delete the whole collection
+    }
+
   	@DeleteMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
   	void deleteUser(@PathVariable Long id) {
-   		repository.deleteById(id);
+        if (repository.existsById(id)) {
+          repository.deleteById(id);  
+        } else {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user");
+        }
   	}
 }
