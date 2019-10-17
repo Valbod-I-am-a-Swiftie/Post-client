@@ -1,7 +1,12 @@
 package hello;
 
-import javax.mail.*;
-import javax.mail.internet.MimeMessage;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Store;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -29,7 +34,8 @@ public class IMAPConnector {
             System.out.println(e.toString());
         }
         try {
-            ctx.init(new KeyManager[0], new TrustManager[] {new DefaultTrustManager()}, new SecureRandom());
+            ctx.init(new KeyManager[0], new TrustManager[] {new DefaultTrustManager()},
+                    new SecureRandom());
         } catch (KeyManagementException e) {
             System.out.println(e.toString());
         }
@@ -40,25 +46,26 @@ public class IMAPConnector {
 
         this.session = getIMAPSession(login, password);
         this.store = this.session.getStore();
-        store.connect( host,Integer.parseInt(IMAPS_PORT),login, password);
+        store.connect(host, Integer.parseInt(IMAPS_PORT), login, password);
     }
 
-    public Session getIMAPSession(String login, String password) throws Exception{
+    public Session getIMAPSession(String login, String password) throws Exception {
 
-        if(login == null){
+        if (login == null) {
             throw new Exception("No such email");
         }
         Properties properties = new Properties();
-        properties.put("mail.debug"          , "false"  );
-        properties.put("mail.store.protocol" , "imaps"  );
-        properties.put("mail.imap.ssl.enable", "true"   );
-        properties.put("mail.imap.port"      , IMAPS_PORT);
+        properties.put("mail.debug", "false");
+        properties.put("mail.store.protocol", "imaps");
+        properties.put("mail.imap.ssl.enable", "true");
+        properties.put("mail.imap.port", IMAPS_PORT);
 
-        Session sessionIMAP = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(login, password);
-            }
-        });
+        Session sessionIMAP =
+                Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(login, password);
+                    }
+                });
         return sessionIMAP;
     }
 
@@ -67,8 +74,10 @@ public class IMAPConnector {
     }
 
     private List<String> getAllFolders(Folder folder) throws MessagingException {
-        List<String> folders = new ArrayList<>(){{add(folder.getFullName());}};
-        for (var nested: folder.list()){
+        List<String> folders = new ArrayList<>() {{
+            add(folder.getFullName());
+        }};
+        for (var nested : folder.list()) {
             folders.addAll(getAllFolders(nested));
         }
         return folders;
@@ -77,14 +86,13 @@ public class IMAPConnector {
     List<PostMessage> getMailList(String folderName) throws MessagingException, IOException {
 
         Folder folder = this.store.getFolder(folderName);
-        if (folder.exists())
-        {
+        if (folder.exists()) {
             folder.open(Folder.READ_ONLY);
 
             Message[] messages = folder.getMessages();
             List<PostMessage> ret = new ArrayList<>();
 
-            for (Message message:messages) {
+            for (Message message : messages) {
                 ret.add(new PostMessage(message));
             }
             return ret;
@@ -96,14 +104,14 @@ public class IMAPConnector {
         Folder folder = this.store.getFolder("SentBox");
         folder.open(Folder.READ_WRITE);
         Message email = message.toMessage(session);
-        folder.appendMessages(new Message[]{email});
+        folder.appendMessages(new Message[] {email});
     }
 
     public void deleteMessage(PostMessage message) throws MessagingException {
         Folder folder = store.getFolder(message.getFolder());
         folder.open(Folder.READ_WRITE);
         Message email = folder.getMessage(message.getNumberInFolder());
-        if (!message.getFolder().equals("Trash")){
+        if (!message.getFolder().equals("Trash")) {
             Folder trashFolder = store.getFolder("Trash");
             trashFolder.open(Folder.READ_WRITE);
             folder.copyMessages(new Message[] {email}, trashFolder);
@@ -114,16 +122,19 @@ public class IMAPConnector {
 
     private static class DefaultTrustManager implements X509TrustManager {
         @Override
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1)
+                throws CertificateException {}
+
         @Override
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1)
+                throws CertificateException {}
+
         @Override
         public X509Certificate[] getAcceptedIssuers() {
             return null;
         }
+
     }
-
-
 
 
 }

@@ -1,6 +1,5 @@
 package hello;
 
-import java.util.Arrays;
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -22,9 +21,8 @@ public class PostMessage {
     private String folder;
 
 
-
-
-    public PostMessage(String title, String content, String contentType, Date date, String[] from, String[] recipients, String folder) {
+    public PostMessage(String title, String content, String contentType, Date date, String[] from,
+            String[] recipients, String folder) {
         this.title = title;
         this.content = content;
         this.contentType = contentType;
@@ -51,7 +49,7 @@ public class PostMessage {
         message.addRecipients(Message.RecipientType.TO, mapToAddress(this.recipients));
         message.setSubject(this.title);
         message.setContent(this.content, this.contentType);
-        if (date != null){
+        if (date != null) {
             message.setSentDate(date);
         }
         return message;
@@ -67,12 +65,10 @@ public class PostMessage {
 
     public Object getContent() {
 
-        if (this.contentType.contains("text") || this.contentType.contains("html"))
-        {
+        if (this.contentType.contains("text") || this.contentType.contains("html")) {
             return content.toString();
         }
-        if (this.contentType.contains("multipart"))
-        {
+        if (this.contentType.contains("multipart")) {
             List<Object> ret = new ArrayList<>();
             MimeMultipart mimeMultipart = (MimeMultipart) content;
             BodyPart bodyPart;
@@ -82,8 +78,7 @@ public class PostMessage {
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
-            for (int i = 0; i<count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 try {
                     bodyPart = mimeMultipart.getBodyPart(i);
                     ret.add(bodyPart.getContent());
@@ -152,11 +147,12 @@ public class PostMessage {
         this.folder = folder;
     }
 
-    private String[] mapToString(Address[] array){
+    private String[] mapToString(Address[] array) {
         return InternetAddress.toUnicodeString(array).split(",");
     }
 
     private Address[] mapToAddress(String[] array) throws AddressException {
-        return InternetAddress.parse(String.join(",",array));
+        return InternetAddress.parse(String.join(",", array));
     }
+
 }

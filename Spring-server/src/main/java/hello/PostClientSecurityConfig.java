@@ -39,4 +39,5 @@ public class PostClientSecurityConfig {
 
     @Value("${server.address}")
     String address;
+
 }
