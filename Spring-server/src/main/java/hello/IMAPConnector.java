@@ -1,6 +1,7 @@
 package hello;
 
 import javax.mail.*;
+import javax.mail.internet.MimeMessage;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -17,7 +18,8 @@ import java.util.Properties;
 
 public class IMAPConnector {
     private static String IMAPS_PORT = "993";
-    public Store store;
+    private Session session;
+    private Store store;
 
     static {
         SSLContext ctx = null;
@@ -36,7 +38,8 @@ public class IMAPConnector {
 
     IMAPConnector(String login, String password, String host) throws Exception {
 
-        this.store = this.getIMAPSession(login, password).getStore();
+        this.session = getIMAPSession(login, password);
+        this.store = this.session.getStore();
         store.connect( host,Integer.parseInt(IMAPS_PORT),login, password);
     }
 
@@ -59,6 +62,18 @@ public class IMAPConnector {
         return sessionIMAP;
     }
 
+    public List<String> getFolders() throws MessagingException {
+        return getAllFolders(this.store.getDefaultFolder());
+    }
+
+    private List<String> getAllFolders(Folder folder) throws MessagingException {
+        List<String> folders = new ArrayList<>(){{add(folder.getFullName());}};
+        for (var nested: folder.list()){
+            folders.addAll(getAllFolders(nested));
+        }
+        return folders;
+    }
+
     List<PostMessage> getMailList(String folderName) throws MessagingException, IOException {
 
         Folder folder = this.store.getFolder(folderName);
@@ -75,6 +90,21 @@ public class IMAPConnector {
             return ret;
         }
         return new ArrayList<>();
+    }
+
+    public void saveMessage(PostMessage message) throws MessagingException {
+        Folder folder = this.store.getFolder("SentBox");
+        MimeMessage email = new MimeMessage(session);
+
+        //email.setFrom(new InternetAddress(message.));                    // setting header fields
+        email.addRecipients(Message.RecipientType.TO, message.getAddresses());
+        email.setSubject(message.getTitle()); // subject line
+
+        // actual mail body
+        email.setContent(message.getContent(), message.getContentType());
+
+
+
     }
 
     private static class DefaultTrustManager implements X509TrustManager {

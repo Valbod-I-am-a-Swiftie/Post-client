@@ -20,6 +20,7 @@ public class PostMessage {
         this.date = date;
         this.addresses = addresses;
     }
+
     public PostMessage(Message message) throws MessagingException, IOException {
         this.title = message.getSubject();
         this.content = message.getContent().toString();

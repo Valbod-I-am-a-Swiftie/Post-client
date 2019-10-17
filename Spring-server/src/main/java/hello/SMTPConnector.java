@@ -7,10 +7,12 @@ import java.util.Properties;
 
 public class SMTPConnector {
     private static String SMTPS_PORT = "465";
+
     public Session SMTPSession;
     SMTPConnector(String userName, String password, String host) throws Exception {
         this.SMTPSession = this.getSMTPSession( userName, password, host);
     }
+
     public Session getSMTPSession(String userName, String password, String host) throws Exception {
 
         if(userName == null){
@@ -33,18 +35,19 @@ public class SMTPConnector {
         return SMTPSession;
     }
 
-    public void sendEmail(Session SMTPSession, String from, String to){
+    public void sendEmail(Session SMTPSession, PostMessage message){
         try {
-            MimeMessage message = new MimeMessage(SMTPSession);        // email message
-            message.setFrom(new InternetAddress(from));                    // setting header fields
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Тестовое письмо от мега почтового клиента(еее-рок!)"); // subject line
+            MimeMessage email = new MimeMessage(SMTPSession);
+
+            //email.setFrom(new InternetAddress(message.));                    // setting header fields
+            email.addRecipients(Message.RecipientType.TO, message.getAddresses());
+            email.setSubject(message.getTitle()); // subject line
 
             // actual mail body
-            message.setText("Привет ${UserName}, чмок тебя в пупочек:*");
+            email.setContent(message.getContent(), message.getContentType());
 
             // Send message
-            Transport.send(message);
+            Transport.send(email);
             System.out.println("Email Sent successfully....");
         } catch (MessagingException mex) {
             mex.printStackTrace();
