@@ -99,6 +99,19 @@ public class IMAPConnector {
         folder.appendMessages(new Message[]{email});
     }
 
+    public void deleteMessage(PostMessage message) throws MessagingException {
+        Folder folder = store.getFolder(message.getFolder());
+        folder.open(Folder.READ_WRITE);
+        Message email = folder.getMessage(message.getNumberInFolder());
+        if (!message.getFolder().equals("Trash")){
+            Folder trashFolder = store.getFolder("Trash");
+            trashFolder.open(Folder.READ_WRITE);
+            folder.copyMessages(new Message[] {email}, trashFolder);
+        }
+        email.setFlag(Flags.Flag.DELETED, true);
+        folder.expunge();
+    }
+
     private static class DefaultTrustManager implements X509TrustManager {
         @Override
         public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}

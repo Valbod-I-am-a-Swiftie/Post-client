@@ -2,13 +2,8 @@ package hello;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HelloController {
@@ -41,10 +36,17 @@ public class HelloController {
 	}
 
 	@GetMapping("/mail/{id}")
-	public List<PostMessage> getMail(@PathVariable Long id) throws Exception{
+	public List<PostMessage> getMail(@PathVariable Long id, @RequestParam(name = "folder", required = false, defaultValue = "INBOX") String folderName) throws Exception{
 		User user = repository.findById(id).orElse(null);
 		IMAPConnector imapConnector = new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
-		return imapConnector.getMailList("INBOX");
+		return imapConnector.getMailList(folderName);
+	}
+
+	@DeleteMapping("/mail/{id}")
+	public void getMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception{
+		User user = repository.findById(id).orElse(null);
+		IMAPConnector imapConnector = new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+		imapConnector.deleteMessage(message);
 	}
 
 	@GetMapping("/users")
