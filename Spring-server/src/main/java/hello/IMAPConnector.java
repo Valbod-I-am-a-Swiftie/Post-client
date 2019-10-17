@@ -5,6 +5,7 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -58,15 +59,22 @@ public class IMAPConnector {
         return sessionIMAP;
     }
 
-    List<String> getMailList() throws MessagingException {
-        Folder inbox = this.store.getFolder("INBOX");
-        inbox.open(Folder.READ_ONLY);
-        Message[] messages = inbox.getMessages();
-        List<String> mailList = new ArrayList<>();
-        for (var message : messages){
-            mailList.add(message.getSubject());
+    List<PostMessage> getMailList(String folderName) throws MessagingException, IOException {
+
+        Folder folder = this.store.getFolder(folderName);
+        if (folder.exists())
+        {
+            folder.open(Folder.READ_ONLY);
+
+            Message[] messages = folder.getMessages();
+            List<PostMessage> ret = new ArrayList<>();
+
+            for (Message message:messages) {
+                ret.add(new PostMessage(message));
+            }
+            return ret;
         }
-        return mailList;
+        return new ArrayList<>();
     }
 
     private static class DefaultTrustManager implements X509TrustManager {
