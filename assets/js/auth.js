@@ -1,5 +1,5 @@
-var username;
-var password;
+var username = null;
+var password = null;
 var shoPass = 0;
 var remMe = 0;
 
@@ -15,11 +15,14 @@ function saveUserData() {
     console.log('password -> ' + password);
 }
 
-// function login() {
-//   if (username != 123 || password != qwerty) {
-//     alert('error input');
-//   }
-// }
+function login() {
+    if (document.getElementById('user').value === null) {
+        console.log('enter username');
+    } else if (document.getElementById('pass').value === null) {
+        console.log('enter password');
+    }
+    alert('username: ' + username + '\npassword: ' + password)
+}
 
 function goToPage() {
   var url = 'https://localhost:8443/API/all';
