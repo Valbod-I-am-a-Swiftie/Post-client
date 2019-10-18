@@ -9,10 +9,19 @@ apply plugin: 'io.spring.dependency-management'
 sourceSets {
     main {
         resources {
-            srcDirs "src/main/resources", "../assets", "config/"
+            srcDirs "src/main/resources", "config/"
         }
     }
 }
+
+task copyWebResources{
+    copy {
+        from '../assets'
+        into 'build/resources/main/public'
+    }
+}
+
+build.dependsOn copyWebResources
 
 bootJar {
     baseName = 'post-client'
