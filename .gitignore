@@ -1,11 +1,3 @@
-./Spring-test/build*
-./Spring-test/bin*
-./Spring-test/.classpath
-./Spring-test/.project
-./Spring-test/.gradle
-./Spring-test/.settings
-Spring-server/.gradle/
-Spring-server/.idea/
+Spring-server/.*
 *.iml
 Spring-server/build/
-Spring-server/src/main/resources/public
