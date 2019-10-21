@@ -1,4 +1,4 @@
-package hello;
+package ikpi63holding.postclient;
 
 import io.undertow.UndertowOptions;
 import io.undertow.servlet.api.SecurityConstraint;
@@ -13,6 +13,15 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class PostClientSecurityConfig {
+    @Value("${server.port.http}")
+    int httpPort;
+
+    @Value("${server.port}")
+    int httpsPort;
+
+    @Value("${server.address}")
+    String address;
+
     @Bean
     public ServletWebServerFactory servletContainer() {
         UndertowServletWebServerFactory undertow = new UndertowServletWebServerFactory();
@@ -30,14 +39,5 @@ public class PostClientSecurityConfig {
         });
         return undertow;
     }
-
-    @Value("${server.port.http}")
-    int httpPort;
-
-    @Value("${server.port}")
-    int httpsPort;
-
-    @Value("${server.address}")
-    String address;
 
 }

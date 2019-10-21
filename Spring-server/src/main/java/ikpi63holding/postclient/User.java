@@ -1,4 +1,4 @@
-package hello;
+package ikpi63holding.postclient;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,76 +31,76 @@ class User {
         this.imapPort = imapPort;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return this.id;
     }
 
-    public void setLogin(String lgn) {
-        this.login = lgn;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLogin() {
         return this.login;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLogin(String lgn) {
+        this.login = lgn;
     }
 
     public String getPassword() {
         return this.password;
     }
 
-    public void setMailLogin(String mailLogin) {
-        this.mailLogin = mailLogin;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMailLogin() {
         return this.mailLogin;
     }
 
-    public void setMailPassword(String mailPassword) {
-        this.mailPassword = mailPassword;
+    public void setMailLogin(String mailLogin) {
+        this.mailLogin = mailLogin;
     }
 
     public String getMailPassword() {
         return this.mailPassword;
     }
 
-    public void setSmtpAddr(String smtpAddr) {
-        this.smtpAddr = smtpAddr;
+    public void setMailPassword(String mailPassword) {
+        this.mailPassword = mailPassword;
     }
 
     public String getSmtpAddr() {
         return this.smtpAddr;
     }
 
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
+    public void setSmtpAddr(String smtpAddr) {
+        this.smtpAddr = smtpAddr;
     }
 
     public int getSmtpPort() {
         return this.smtpPort;
     }
 
-    public void setImapAddr(String imapAddr) {
-        this.imapAddr = imapAddr;
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
     }
 
     public String getImapAddr() {
         return this.imapAddr;
     }
 
-    public void setImapPort(int imapPort) {
-        this.imapPort = imapPort;
+    public void setImapAddr(String imapAddr) {
+        this.imapAddr = imapAddr;
     }
 
     public int getImapPort() {
         return this.imapPort;
+    }
+
+    public void setImapPort(int imapPort) {
+        this.imapPort = imapPort;
     }
 
 }
