@@ -4,14 +4,21 @@ Web based postal client
 
 #### Current features
 
-- None yet
-- But we have some uml-s and web-gui design ideas!
-
+- Connect using HTTPS
+- Create user
+- Connect to remote mail server and storage using SMTPS and IMAPS
+- Send simple message
+- Read and delete simple messages
 
 #### Future features
 
-- Create account
-- IMAP/SMTP to remote mail servers
-- Write and send email thru SMTP
-- Pull and read email thru IMAP
+- Web UI
+- JWT authentication
+- Correctly load complex email messages from remote storage
+- Create folders, set flags and move messages on remote mail storage
+- Send complex multipart messages with attachments
+- Better, practical REST api
+- Query support
+- Paging support
+- Multiple remote accounts per user
 - And more!

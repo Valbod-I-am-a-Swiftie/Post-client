@@ -1,4 +1,4 @@
-package hello;
+package ikpi63holding.postclient;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -16,9 +16,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class SMTPConnector {
+public class SmtpConnector {
     private static String SMTPS_PORT = "465";
-
 
     static {
         SSLContext ctx = null;
@@ -29,7 +28,7 @@ public class SMTPConnector {
         }
         try {
             ctx.init(new KeyManager[0],
-                    new TrustManager[] {new SMTPConnector.DefaultTrustManager()},
+                    new TrustManager[] {new SmtpConnector.DefaultTrustManager()},
                     new SecureRandom());
         } catch (KeyManagementException e) {
             System.out.println(e.toString());
@@ -37,15 +36,13 @@ public class SMTPConnector {
         SSLContext.setDefault(ctx);
     }
 
-    public Session SMTPSession;
+    public Session SmtpSession;
 
-    SMTPConnector(String userName, String password, String host) throws Exception {
-        this.SMTPSession = this.getSMTPSession(userName, password, host);
-        SMTPSession.setDebug(true);
-        SMTPSession.setDebugOut(System.out);
+    SmtpConnector(String userName, String password, String host) throws Exception {
+        this.SmtpSession = this.getSmtpSession(userName, password, host);
     }
 
-    public Session getSMTPSession(String userName, String password, String host) throws Exception {
+    private Session getSmtpSession(String userName, String password, String host) throws Exception {
 
         if (userName == null) {
             throw new Exception("No such user");
@@ -58,18 +55,18 @@ public class SMTPConnector {
         properties.put("mail.smtp.socketFactory.port", SMTPS_PORT);
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
-        Session SMTPSession = Session.getInstance(properties,
+        Session SmtpSession = Session.getInstance(properties,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(userName, password);
                     }
                 });
 
-        return SMTPSession;
+        return SmtpSession;
     }
 
     public void sendEmail(PostMessage message) throws MessagingException {
-        Message email = message.toMessage(SMTPSession);
+        Message email = message.toMessage(SmtpSession);
         System.out.println("Email converted");
         Transport.send(email);
         System.out.println("Email Sent successfully....");

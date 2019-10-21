@@ -1,7 +1,7 @@
-package hello;
+package ikpi63holding.postclient;
 
 import java.util.List;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,35 +13,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
-
 
 @RestController
-public class HelloController {
+public class ApiController {
 
     private final UserRepository repository;
 
-
-    HelloController(UserRepository repository) {
+    ApiController(UserRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping("/folders/{id}")
     public List<String> getFolders(@PathVariable Long id) throws Exception {
         User user = repository.findById(id).orElse(null);
-        IMAPConnector connector =
-                new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+        ImapConnector connector =
+                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
         return connector.getFolders();
     }
 
     @PostMapping("/mail/{id}")
     public void sendMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception {
         User user = repository.findById(id).orElse(null);
-        SMTPConnector smtpConnector =
-                new SMTPConnector(user.getMailLogin(), user.getMailPassword(), user.getSmtpAddr());
+        SmtpConnector smtpConnector =
+                new SmtpConnector(user.getMailLogin(), user.getMailPassword(), user.getSmtpAddr());
         smtpConnector.sendEmail(message);
-        IMAPConnector imapConnector =
-                new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+        ImapConnector imapConnector =
+                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
         imapConnector.saveSendMessage(message);
     }
 
@@ -50,16 +47,16 @@ public class HelloController {
             @RequestParam(name = "folder", required = false, defaultValue = "INBOX")
                     String folderName) throws Exception {
         User user = repository.findById(id).orElse(null);
-        IMAPConnector imapConnector =
-                new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+        ImapConnector imapConnector =
+                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
         return imapConnector.getMailList(folderName);
     }
 
     @DeleteMapping("/mail/{id}")
     public void getMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception {
         User user = repository.findById(id).orElse(null);
-        IMAPConnector imapConnector =
-                new IMAPConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+        ImapConnector imapConnector =
+                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
         imapConnector.deleteMessage(message);
     }
 
@@ -82,7 +79,6 @@ public class HelloController {
     List<User> all() {
         return repository.findAll();
     }
-
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)

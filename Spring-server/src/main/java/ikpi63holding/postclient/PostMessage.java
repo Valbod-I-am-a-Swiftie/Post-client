@@ -1,14 +1,18 @@
-package hello;
+package ikpi63holding.postclient;
 
-import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.mail.Address;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class PostMessage {
     private int numberInFolder;
@@ -19,7 +23,6 @@ public class PostMessage {
     private String[] from;
     private String[] recipients;
     private String folder;
-
 
     public PostMessage(String title, String content, String contentType, Date date, String[] from,
             String[] recipients, String folder) {
@@ -82,9 +85,7 @@ public class PostMessage {
                 try {
                     bodyPart = mimeMultipart.getBodyPart(i);
                     ret.add(bodyPart.getContent());
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (MessagingException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -129,7 +130,6 @@ public class PostMessage {
     public void setNumberInFolder(int numberInFolder) {
         this.numberInFolder = numberInFolder;
     }
-
 
     public String[] getRecipients() {
         return recipients;

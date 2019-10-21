@@ -1,5 +1,14 @@
-package hello;
+package ikpi63holding.postclient;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -11,20 +20,9 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
-public class IMAPConnector {
+public class ImapConnector {
     private static String IMAPS_PORT = "993";
-    private Session session;
-    private Store store;
 
     static {
         SSLContext ctx = null;
@@ -42,14 +40,17 @@ public class IMAPConnector {
         SSLContext.setDefault(ctx);
     }
 
-    IMAPConnector(String login, String password, String host) throws Exception {
+    private Session session;
+    private Store store;
 
-        this.session = getIMAPSession(login, password);
+    ImapConnector(String login, String password, String host) throws Exception {
+
+        this.session = getImapSession(login, password);
         this.store = this.session.getStore();
         store.connect(host, Integer.parseInt(IMAPS_PORT), login, password);
     }
 
-    public Session getIMAPSession(String login, String password) throws Exception {
+    public Session getImapSession(String login, String password) throws Exception {
 
         if (login == null) {
             throw new Exception("No such email");
@@ -60,13 +61,13 @@ public class IMAPConnector {
         properties.put("mail.imap.ssl.enable", "true");
         properties.put("mail.imap.port", IMAPS_PORT);
 
-        Session sessionIMAP =
+        Session sessionImap =
                 Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(login, password);
                     }
                 });
-        return sessionIMAP;
+        return sessionImap;
     }
 
     public List<String> getFolders() throws MessagingException {
@@ -135,6 +136,5 @@ public class IMAPConnector {
         }
 
     }
-
 
 }
