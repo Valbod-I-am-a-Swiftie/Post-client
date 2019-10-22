@@ -53,7 +53,7 @@ public class ApiController {
     }
 
     @DeleteMapping("/mail/{id}")
-    public void getMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception {
+    public void deleteMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception {
         User user = repository.findById(id).orElse(null);
         ImapConnector imapConnector =
                 new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
