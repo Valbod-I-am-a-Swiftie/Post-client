@@ -91,7 +91,7 @@ public class ApiController {
     User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
         return repository.findById(id)
                 .map(user -> {
-                    user.setLogin(newUser.getLogin());
+                    user.setUsername(newUser.getUsername());
                     user.setPassword(newUser.getPassword());
                     user.setMailLogin(newUser.getMailLogin());
                     user.setMailPassword(newUser.getMailPassword());
