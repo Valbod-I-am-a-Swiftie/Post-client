@@ -11,14 +11,13 @@
     crossorigin="anonymous">
     <!-- vue.js -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
-    <script type="text/javascript" src="js/auth.js">
+    <script type="text/javascript" src="js/auth.js"></script>
 
-    </script>
 
   </head>
   <body>
     <div class="auth-container p-l-85 p-r-85 p-t-55 p-b-55">
-      <form class="login-form" action="index.html" method="post">
+      <form class="login-form" method="post" action="index.html">
         <span class="auth-title">
           account login
         </span>
@@ -26,23 +25,23 @@
           username
         </span>
         <div class="input-f">
-          <input id="user" class="in-us" type="text" name="username" value="" oninput="saveUsername(this.value)">
-          <span class="focus-input"></span>
+          <input id="user" class="in-us" type="text" name="username" value="">
+          <!-- <span class="focus-input"></span> -->
         </div>
         <span class="ttl">
           password
         </span>
         <div class="input-f m-b-12">
-          <span class="btn-show-pass">
-            <i id="eye-icon" class="fas fa-eye-slash"></i>
+          <span class="btn-show-pass" onclick="showPass()">
+              <i id="eye-icon" class="fas fa-eye-slash fa-eye"></i>
           </span>
-          <input id="pass" class="in-us" type="password" name="password" value="" oninput="savePassword(this.value)">
-          <span class="focus-input"></span>
+          <input id="pass" class="in-us" type="password" name="password" value="">
+          <!-- <span class="focus-input"></span> -->
         </div>
         <div class="full-class">
           <div class="checkbox-form">
-            <input id="ckb" class="input-checkbox" type="checkbox" name="remember-me" value="">
-            <label class="input-checkbox-label" for="ckb">
+            <input id="check" class="input-checkbox" type="checkbox" name="remember-me" value="" checked>
+            <label id="checkLabel" class="input-checkbox-label fas fa-check far fa-square" for="ckb" onclick="rememberMe()">
               Remember Me
             </label>
           </div>
@@ -59,10 +58,5 @@
         </div>
       </form>
     </div>
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
-  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
   </body>
 </html>
