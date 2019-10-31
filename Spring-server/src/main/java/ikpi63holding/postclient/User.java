@@ -28,8 +28,8 @@ public class User {
 
     User() {}
 
-    User(String username, String password, String mailLogin, String mailPassword, String smtpAddr,
-            int smtpPort,
+    User(String username, String password, String mailLogin, String mailPassword,
+            String smtpAddr,int smtpPort,
             String imapAddr, int imapPort,
             String roles, String permissions) {
         this.username = username;
