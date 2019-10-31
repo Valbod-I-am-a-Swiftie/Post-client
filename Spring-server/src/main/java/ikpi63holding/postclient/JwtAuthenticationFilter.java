@@ -29,7 +29,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         
-        // Grab credentials and map them to login viewmodel
         LoginViewModel credentials = null;
         try {
             credentials = new ObjectMapper().readValue(request.getInputStream(), LoginViewModel.class);
@@ -37,13 +36,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             e.printStackTrace();
         }
 
-        // Create login token
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 credentials.getUsername(),
                 credentials.getPassword(),
                 new ArrayList<>());
 
-        // Authenticate user
         Authentication auth = authenticationManager.authenticate(authenticationToken);
 
         return auth;
@@ -57,7 +54,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = JWT.create()
                 .withSubject(principal.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET.getBytes())); // TODO Remember it
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()));
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX +  token);
     }

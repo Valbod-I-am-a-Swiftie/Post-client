@@ -2,6 +2,8 @@ package ikpi63holding.postclient;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -120,6 +122,29 @@ public class ApiController {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user");
         }
+    }
+
+    @PostMapping("/registration")
+    @ResponseStatus(HttpStatus.CREATED)
+    User registration(@RequestBody User newUser) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        
+        if (this.repository.findByUsername(newUser.getUsername()) != null) {
+            throw new ResponseStatusException(HttpStatus.ACCEPTED, "PAYLOAD");
+        }
+
+        return repository.save(new User(
+            newUser.getUsername(),
+            passwordEncoder.encode(newUser.getPassword()),
+            newUser.getMailLogin(),
+            newUser.getMailPassword(),
+            newUser.getSmtpAddr(),
+            newUser.getSmtpPort(),
+            newUser.getImapAddr(),
+            newUser.getImapPort(),
+            "USER",
+            ""
+        ));
     }
 
 }
