@@ -29,9 +29,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         
-        LoginViewModel credentials = null;
+        User credentials = null;
         try {
-            credentials = new ObjectMapper().readValue(request.getInputStream(), LoginViewModel.class);
+            credentials = new ObjectMapper().readValue(request.getInputStream(), User.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
