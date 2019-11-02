@@ -3,18 +3,20 @@ package ikpi63holding.postclient;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-class User {
-    private @Id @GeneratedValue Long id;
+public class User {
+    @Id
+    @GeneratedValue
+    private Long id;
     private String login;
     private String password;
-    private String mailLogin;
-    private String mailPassword;
-    private String smtpAddr;
-    private int smtpPort;
-    private String imapAddr;
-    private int imapPort;
+
+    @OneToOne(mappedBy = "user", cascade=CascadeType.ALL)
+    private Mailbox mailbox = new Mailbox();
 
     User() {}
 
@@ -23,12 +25,8 @@ class User {
             String imapAddr, int imapPort) {
         this.login = login;
         this.password = password;
-        this.mailLogin = mailLogin;
-        this.mailPassword = mailPassword;
-        this.smtpAddr = smtpAddr;
-        this.smtpPort = smtpPort;
-        this.imapAddr = imapAddr;
-        this.imapPort = imapPort;
+        this.mailbox = new Mailbox(mailLogin, mailPassword, smtpAddr, smtpPort, imapAddr, 
+                imapPort);
     }
 
     public Long getId() {
@@ -55,52 +53,58 @@ class User {
         this.password = password;
     }
 
+    @JsonIgnore
     public String getMailLogin() {
-        return this.mailLogin;
+        return this.mailbox.getMailLogin();
     }
 
     public void setMailLogin(String mailLogin) {
-        this.mailLogin = mailLogin;
+        this.mailbox.setMailLogin(mailLogin);
     }
 
+    @JsonIgnore
     public String getMailPassword() {
-        return this.mailPassword;
+        return this.mailbox.getMailPassword();
     }
 
     public void setMailPassword(String mailPassword) {
-        this.mailPassword = mailPassword;
+        this.mailbox.setMailPassword(mailPassword);
     }
 
+    @JsonIgnore
     public String getSmtpAddr() {
-        return this.smtpAddr;
+        return this.mailbox.getSmtpAddr();
     }
 
     public void setSmtpAddr(String smtpAddr) {
-        this.smtpAddr = smtpAddr;
+        this.mailbox.setSmtpAddr(smtpAddr);
     }
 
+    @JsonIgnore
     public int getSmtpPort() {
-        return this.smtpPort;
+        return this.mailbox.getSmtpPort();
     }
 
     public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
+        this.mailbox.setSmtpPort(smtpPort);
     }
 
+    @JsonIgnore
     public String getImapAddr() {
-        return this.imapAddr;
+        return this.mailbox.getImapAddr();
     }
 
     public void setImapAddr(String imapAddr) {
-        this.imapAddr = imapAddr;
+        this.mailbox.setImapAddr(imapAddr);
     }
 
+    @JsonIgnore
     public int getImapPort() {
-        return this.imapPort;
+        return this.mailbox.getImapPort();
     }
 
     public void setImapPort(int imapPort) {
-        this.imapPort = imapPort;
+        this.mailbox.setImapPort(imapPort);
     }
 
 }
