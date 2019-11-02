@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,12 +59,6 @@ public class ApiController {
         ImapConnector imapConnector =
                 new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
         imapConnector.deleteMessage(message);
-    }
-
-    @ExceptionHandler(ResponseStatusException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such user")
-    String handleNotFoundException(ResponseStatusException ex) {
-        return ex.toString();
     }
 
     @GetMapping("/users/{id}")
@@ -130,7 +123,8 @@ public class ApiController {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         
         if (this.repository.findByUsername(newUser.getUsername()) != null) {
-            throw new ResponseStatusException(HttpStatus.ACCEPTED, "PAYLOAD");
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                                              "User " + newUser.getUsername() + " already exists");
         }
 
         return repository.save(new User(
