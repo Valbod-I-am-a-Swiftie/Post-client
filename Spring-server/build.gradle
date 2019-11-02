@@ -25,9 +25,10 @@ bootJar {
 task copyWebResources(type: Copy) {
     from '../assets'
     into 'build/resources/main/public'
+    include '**/*.html', '**/*.css' , '**/*.js', '**/*.vue'
 }
 
-build.dependsOn copyWebResources
+processResources.dependsOn copyWebResources
 
 repositories {
     mavenCentral()
