@@ -1,1 +1,85 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap');
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+li {
+    list-style-type: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+i {
+    display: block;
+    font-size: 20px;
+    margin: 10px;
+}
+
+.container {
+    /* background-color: azure; */
+    display: flex;
+    margin: 50px;
+    width: 1250px;
+}
+
+.letters-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* width: 1250px; */
+}
+
+.letter-item {
+    margin-bottom: 5px;
+    border: black solid 1px;
+
+    display: flex;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.letter-checkbox {
+    display: flex;
+    justify-content: center;
+}
+
+.letter-from {
+    margin: 10px;
+    width: 200px;
+}
+
+.letter-title {
+    margin: 10px;
+    width: 700px;
+}
+
+.letter-date {
+    display: block;
+    float: right;
+    margin: 10px;
+    width: 50px;
+}
+
+.letter-delete {
+    display: none;
+    justify-content: flex-end;
+    float: right;
+    width: 50px;
+}
+
 
