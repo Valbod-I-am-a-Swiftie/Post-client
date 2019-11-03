@@ -2,8 +2,9 @@ package ikpi63holding.postclient;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,12 +61,6 @@ public class ApiController {
         imapConnector.deleteMessage(message);
     }
 
-    @ExceptionHandler(ResponseStatusException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such user")
-    String handleNotFoundException(ResponseStatusException ex) {
-        return ex.toString();
-    }
-
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     User uniqueUser(@PathVariable Long id) {
@@ -91,7 +86,7 @@ public class ApiController {
     User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
         return repository.findById(id)
                 .map(user -> {
-                    user.setLogin(newUser.getLogin());
+                    user.setUsername(newUser.getUsername());
                     user.setPassword(newUser.getPassword());
                     user.setMailLogin(newUser.getMailLogin());
                     user.setMailPassword(newUser.getMailPassword());
@@ -120,6 +115,30 @@ public class ApiController {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user");
         }
+    }
+
+    @PostMapping("/registration")
+    @ResponseStatus(HttpStatus.CREATED)
+    User registration(@RequestBody User newUser) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        
+        if (this.repository.findByUsername(newUser.getUsername()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                                              "User " + newUser.getUsername() + " already exists");
+        }
+
+        return repository.save(new User(
+            newUser.getUsername(),
+            passwordEncoder.encode(newUser.getPassword()),
+            newUser.getMailLogin(),
+            newUser.getMailPassword(),
+            newUser.getSmtpAddr(),
+            newUser.getSmtpPort(),
+            newUser.getImapAddr(),
+            newUser.getImapPort(),
+            "USER",
+            ""
+        ));
     }
 
 }

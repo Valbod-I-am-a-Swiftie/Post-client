@@ -1,13 +1,17 @@
 package ikpi63holding.postclient;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-class User {
+public class User {
     private @Id @GeneratedValue Long id;
-    private String login;
+    private String username;
     private String password;
     private String mailLogin;
     private String mailPassword;
@@ -16,12 +20,19 @@ class User {
     private String imapAddr;
     private int imapPort;
 
+    private int active;
+
+    private String roles = "";
+
+    private String permissions = "";
+
     User() {}
 
-    User(String login, String password, String mailLogin, String mailPassword, String smtpAddr,
-            int smtpPort,
-            String imapAddr, int imapPort) {
-        this.login = login;
+    User(String username, String password, String mailLogin, String mailPassword,
+            String smtpAddr,int smtpPort,
+            String imapAddr, int imapPort,
+            String roles, String permissions) {
+        this.username = username;
         this.password = password;
         this.mailLogin = mailLogin;
         this.mailPassword = mailPassword;
@@ -29,6 +40,10 @@ class User {
         this.smtpPort = smtpPort;
         this.imapAddr = imapAddr;
         this.imapPort = imapPort;
+
+        this.roles = roles;
+        this.permissions = permissions;
+        this.active = 1;
     }
 
     public Long getId() {
@@ -39,12 +54,12 @@ class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return this.login;
+    public String getUsername() {
+        return this.username;
     }
 
-    public void setLogin(String lgn) {
-        this.login = lgn;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -103,4 +118,30 @@ class User {
         this.imapPort = imapPort;
     }
 
+    // New methods for auth
+    public int getActive() {
+        return active;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public List<String> getRoleList(){
+        if(this.roles.length() > 0){
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
+
+    public List<String> getPermissionList(){
+        if(this.permissions.length() > 0){
+            return Arrays.asList(this.permissions.split(","));
+        }
+        return new ArrayList<>();
+    }
 }
