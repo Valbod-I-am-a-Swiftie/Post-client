@@ -2,18 +2,33 @@ package ikpi63holding.postclient;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.MapKey;
 import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.ElementCollection;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(
+        strategy= GenerationType.AUTO, 
+        generator="native"
+    )
     private Long id;
     private String login;
     private String password;
+
+    @ElementCollection(fetch=FetchType.EAGER)
+    @MapKeyColumn(name="mapKey")
+    private Map<Integer, String> folders = new HashMap<Integer, String>();
 
     @OneToOne(mappedBy = "user", cascade=CascadeType.ALL)
     private Mailbox mailbox = new Mailbox();
@@ -47,6 +62,17 @@ public class User {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public Set<Map.Entry<Integer, String>> getFolders() {
+        return this.folders.entrySet();
+    }
+
+    public void setDefaultFolders() {
+        folders.put(1, "Inbox");
+        folders.put(2, "Sent");
+        folders.put(3, "Drafts");
+        folders.put(4, "Trash");
     }
 
     public void setPassword(String password) {

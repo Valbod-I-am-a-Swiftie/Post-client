@@ -83,6 +83,7 @@ public class ApiController {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     User newUser(@RequestBody User newUser) {
+        newUser.setDefaultFolders();
         return repository.save(newUser);
     }
 
