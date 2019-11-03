@@ -94,20 +94,4 @@ public class Mailbox {
         this.imapPort = imapPort;
     }
 
-    @Override
-    public String toString() {
-        return "Mailbox [mailLogin="
-            + mailLogin
-            + ", mailPassword="
-            + mailPassword
-            + ", smtpAddr="
-            + smtpAddr
-            + ", smtpPort="
-            + smtpPort
-            + ", imapAddr="
-            + imapAddr
-            + ", imapPort="
-            + imapPort + "]";
-    }
-    
 }
