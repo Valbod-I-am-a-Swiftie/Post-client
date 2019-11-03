@@ -94,13 +94,6 @@ public class ApiController {
                 .map(user -> {
                     user.setLogin(newUser.getLogin());
                     user.setPassword(newUser.getPassword());
-                    user.setMailLogin(newUser.getMailLogin());
-                    user.setMailPassword(newUser.getMailPassword());
-                    user.setSmtpAddr(newUser.getSmtpAddr());
-                    user.setSmtpPort(newUser.getSmtpPort());
-                    user.setImapAddr(newUser.getImapAddr());
-                    user.setImapPort(newUser.getImapPort());
-
                     return repository.save(user);
                 })
                 .orElseThrow(

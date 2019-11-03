@@ -25,13 +25,18 @@ public class User {
     private Long id;
     private String login;
     private String password;
+    private int folderId = 0;
 
     @ElementCollection(fetch=FetchType.EAGER)
     @MapKeyColumn(name="mapKey")
-    private Map<Integer, String> folders = new HashMap<Integer, String>();
+    private Map<Integer, String> folders = new HashMap<>();
 
     @OneToOne(mappedBy = "user", cascade=CascadeType.ALL)
     private Mailbox mailbox = new Mailbox();
+
+    @ElementCollection(fetch=FetchType.EAGER)
+    @MapKeyColumn(name="mapKey")
+    private Map<String, String> mailboxMap = new HashMap<>();
 
     User() {}
 
@@ -40,8 +45,6 @@ public class User {
             String imapAddr, int imapPort) {
         this.login = login;
         this.password = password;
-        this.mailbox = new Mailbox(mailLogin, mailPassword, smtpAddr, smtpPort, imapAddr, 
-                imapPort);
     }
 
     public Long getId() {
@@ -64,19 +67,48 @@ public class User {
         return this.password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Set<Map.Entry<Integer, String>> getFolders() {
         return this.folders.entrySet();
     }
 
     public void setDefaultFolders() {
-        folders.put(1, "Inbox");
-        folders.put(2, "Sent");
-        folders.put(3, "Drafts");
-        folders.put(4, "Trash");
+        folders.put(++folderId, "Inbox");
+        folders.put(++folderId, "Sent");
+        folders.put(++folderId, "Drafts");
+        folders.put(++folderId, "Trash");
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public Set<Map.Entry<String, String>> getMailboxMap() {
+        return this.mailboxMap.entrySet();
+    }
+
+    public void setMailboxMap(String mailLogin, String mailPassword, String smtpAddr, int smtpPort,
+            String imapAddr, int imapPort) {
+        mailboxMap.put("mailLogin", this.mailbox.getMailLogin());
+        mailboxMap.put("mailPassword", this.mailbox.getMailPassword());
+        mailboxMap.put("smtpAddr", this.mailbox.getSmtpAddr());
+        mailboxMap.put("smtpPort", Integer.toString(this.mailbox.getSmtpPort()));
+        mailboxMap.put("imapAddr", this.mailbox.getImapAddr());
+        mailboxMap.put("imapPort", Integer.toString(this.mailbox.getImapPort()));
+    }
+
+    @JsonIgnore
+    public Mailbox getMailbox() {
+        return this.mailbox;
+    }
+
+    public void setMailbox(String mailLogin, String mailPassword, String smtpAddr, int smtpPort,
+            String imapAddr, int imapPort) {
+        this.mailbox.setMailLogin(mailLogin);
+        this.mailbox.setMailPassword(mailPassword);
+        this.mailbox.setSmtpAddr(smtpAddr);
+        this.mailbox.setSmtpPort(smtpPort);
+        this.mailbox.setImapAddr(imapAddr);
+        this.mailbox.setImapPort(imapPort);
     }
 
     @JsonIgnore

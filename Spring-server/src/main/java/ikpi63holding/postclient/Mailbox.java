@@ -2,6 +2,7 @@ package ikpi63holding.postclient;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -10,7 +11,9 @@ import javax.persistence.CascadeType;
 @Entity
 public class Mailbox {
 	@Id 
-    @GeneratedValue
+    @GeneratedValue(
+        strategy= GenerationType.AUTO
+    )
     private Long id;
     private String mailLogin;
     private String mailPassword;
@@ -91,4 +94,20 @@ public class Mailbox {
         this.imapPort = imapPort;
     }
 
+    @Override
+    public String toString() {
+        return "Mailbox [mailLogin="
+            + mailLogin
+            + ", mailPassword="
+            + mailPassword
+            + ", smtpAddr="
+            + smtpAddr
+            + ", smtpPort="
+            + smtpPort
+            + ", imapAddr="
+            + imapAddr
+            + ", imapPort="
+            + imapPort + "]";
+    }
+    
 }
