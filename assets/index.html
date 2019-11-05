@@ -4,7 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>post-client</title>
-
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+    crossorigin="anonymous">
+    <!-- my css -->
+    <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/main.css"> 
     <!-- font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css"
@@ -16,31 +21,85 @@
   </head>
   <body>
 
+    <!-- Modal -->
+    <div class="newLetter-modal" id="newLetter-modal">
+        <!-- <div class="container"> -->
+            <div class="newLetter-modal-container">
+                <div class="newLetter-modal-content">
+                    <div class="newLetter-modal-header">
+                        <h3 class="newLetter-modal-title">new message</h3>
+                        <!-- <button type="button" class="cancel-button" > -->
+                            <!-- close icon -->
+                        <!-- </button> -->
+                    </div>
+                    <hr>                    
+                    <div class="newLetter-modal-body">
+                        <div class="recipient-container">
+                            <input id="rec" class="recipients" type="text" placeholder="Recipients"></input>
+                        </div>
+                        <hr>
+                        <div class="subject-container">
+                            <input id="sub" class="subject" type="text" placeholder="Subject"></input>
+                        </div>
+                        <hr>
+                        <div class="text-container">
+                            <textarea class="area" name="" id="text" cols="30" rows="10" placeholder="Text"></textarea>
+                        </div>
+                    </div>    
+                    <hr>                
+                    <div class="newLetter-modal-footer">
+                        <button type="button" class="modal-button" onclick="saveChanges()">Save changes</button>
+                        <button type="button" class="modal-button" onclick="closeNewLetterModalWindow()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        <!-- </div> -->
+    </div>
+
     <div id="frame" class="container">
+        <!-- <div class="newLetter-button-container"> -->
+            <button class="newLetter-button" onclick="openNewLetterModalWindow()">
+                <!-- <a href="#newLetter-modal"> -->
+                <i class="fas fa-plus-circle"></i>
+                <!-- </a> -->
+            </button>
+        <!-- </div> -->
         <div id="letters" class="letters-container">
             <ul v-for="letter in message">
                 <li>
-                    <div class="letter-item" onmouseover="showHideItem(this)" onmouseout="hideHideItem(this)">
+                    <div v-bind:id="letter.numberInFolder" class="letter-item" onmouseover="showHideItem(this)" 
+                                                                               onmouseout="hideHideItem(this)" 
+                                                                               onclick="showLetter(this)">
                         <div class="letter-checkbox">
-                             <i class="far fa-square"  onclick="check(this)"></i>
-                             <!-- <i class="far fa-check-square"></i> -->
+                            <i class="far fa-square"  onclick="check(this)"></i>
+                            <!-- <i class="far fa-check-square"></i> -->
                         </div>
+                        <!-- <div v-bind:id="letter.numberInFolder" class="letter-id"></div> -->
                         <div class="letter-from" v-html="letter.from[0]"></div>
                         <div class="letter-title" v-html="letter.title"></div>
                         <div class="letter-date" v-html="letter.date"></div>
-                        <div class="letter-delete"  onclick="deleteItem(this)">
+                        <!-- <div class="letter-delete" onclick="deleteItem(this)">
                             <i class="fas fa-trash"></i>
-                        </div>
-                    </div>                   
+                        </div> -->
+                    </div>
+                    <div v-bind:id="'del_'+ letter.numberInFolder" class="letter-delete" onclick="deleteItem(this)"
+                    onmouseover="colorDel(this)"
+                    onmouseout="noColorDel(this)">
+                        <i class="fas fa-trash"></i>
+                    </div> 
                 </li>
             </ul>
         </div>
+        <div id="letter" class="letter-container">
+            <div class="back-button-contaiter">
+                <button class="back-button" type="button" onclick="backToListOfLetters()">
+                    back
+                </button>
+            </div>
+        </div>
     </div>
 
-  <div id="letterContent">
-
-  </div>
-
   <script src="js/appVue.js"></script>  
+  <script src="js/modal.js"></script>
  </body>
 </html>

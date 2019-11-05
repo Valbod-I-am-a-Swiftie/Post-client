@@ -7,16 +7,20 @@
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
-  font-size: 14px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+    height: 100%;
+
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 li {
     list-style-type: none;
+    display: flex;
+    width: auto;
 }
 
 ul {
@@ -25,7 +29,7 @@ ul {
 }
 
 i {
-    display: block;
+    display: flex;
     font-size: 20px;
     margin: 10px;
 }
@@ -49,13 +53,21 @@ i {
     border: black solid 1px;
 
     display: flex;
-    margin: 10px;
     cursor: pointer;
+}
+
+.letter-item:hover {
+    background-color: #e8e8e8;
+    font-weight: bold;
 }
 
 .letter-checkbox {
     display: flex;
     justify-content: center;
+}
+
+.letter-id {
+    display: none;
 }
 
 .letter-from {
@@ -69,17 +81,79 @@ i {
 }
 
 .letter-date {
-    display: block;
+    visibility: visible;
     float: right;
     margin: 10px;
     width: 50px;
 }
 
 .letter-delete {
-    display: none;
-    justify-content: flex-end;
-    float: right;
-    width: 50px;
+    visibility: visible;  
+    cursor: pointer;  
+    color: #949494;
 }
 
+.letter-container {
+    display: none;
+
+    background-color: #c4c4c4;
+    padding: 20px;
+}
+
+.newLetter-button {
+    border: black solid 1px;
+
+    background-color: white;
+    color: black;
+    border-radius: 30px;
+
+    width: 40px;
+    height: 60px;
+
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    padding: 0 50px;
+}
+
+.newLetter-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.newLetter-button:focus {
+    outline-style: none;
+}
+
+.fa-plus-circle {
+    font-size: 30px;
+}
+
+.back-button {
+    border: black solid 1px;
+
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 30px;
+
+    width: 40px;
+    height: 60px;
+
+    display: flex;
+    justify-content: center;
+    padding: 0 50px;
+
+    margin: 10px;
+}
+
+.back-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.back-button:focus {
+    outline-style: none;
+}
 
