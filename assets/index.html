@@ -57,13 +57,16 @@
     </div>
 
     <div id="frame" class="container">
-        <!-- <div class="newLetter-button-container"> -->
+        <div class="buttons-container">
             <button class="newLetter-button" onclick="openNewLetterModalWindow()">
                 <!-- <a href="#newLetter-modal"> -->
                 <i class="fas fa-plus-circle"></i>
                 <!-- </a> -->
             </button>
-        <!-- </div> -->
+            <button class="bold-button newLetter-button" onclick="getLettersList()">
+                <i class="fas fa-redo-alt"></i>
+            </button>
+        </div>
         <div id="letters" class="letters-container">
             <ul v-for="letter in message">
                 <li>
@@ -83,8 +86,8 @@
                         </div> -->
                     </div>
                     <div v-bind:id="'del_'+ letter.numberInFolder" class="letter-delete" onclick="deleteItem(this)"
-                    onmouseover="colorDel(this)"
-                    onmouseout="noColorDel(this)">
+                                                                                         onmouseover="colorDel(this)"
+                                                                                         onmouseout="noColorDel(this)">
                         <i class="fas fa-trash"></i>
                     </div> 
                 </li>

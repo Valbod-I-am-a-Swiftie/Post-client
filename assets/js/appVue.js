@@ -110,9 +110,47 @@ var letters = new Vue({
     }
 });
 
+//stub
+function getLettersList() {
+    letters.message = [];
+    for (let i = 0; i < letterInJSON.length; i++) { 
+        let copy = letterInJSON[i];
+        letters.message.push(Object.assign({}, copy));        
+    }
+    
+    setData();
+}
+//
 
-for (let i = 0; i < letterInJSON.length; i++) { 
-    letters.message.push(letterInJSON[i]);        
+window.onload = getLettersList();
+
+function setData() {
+    for (let i = 0; i < letters.message.length; i++) {        
+        if (letters.message[i].date === null) {
+            letters.message[i].date = '';
+            
+        } else {
+            let now = new Date();
+            
+            let hours = new Date(letters.message[i].date).getHours();
+            let min = new Date(letters.message[i].date).getMinutes();
+    
+            let day = new Date(letters.message[i].date).getDay();
+            let mon = new Date(letters.message[i].date).getMonth();
+            let year = new Date(letters.message[i].date).getFullYear();
+    
+            if (now.getMonth() === mon 
+                && now.getDay() === day 
+                && now.getFullYear() === year) {
+                letters.message[i].date = hours + ':' + min;
+            } else {
+                let date = new Date(letters.message[i].date).toLocaleString('ru', {
+                    day: 'numeric',
+                    month: 'short'});
+                letters.message[i].date = date;                
+            }
+        }    
+    }
 }
 
 function check(elem) {
@@ -188,32 +226,4 @@ function backToListOfLetters() {
 
     letterContainer.style.display = 'none';
     listOfLetters.style.display = 'flex';
-}
-
-for (let i = 0; i < letters.message.length; i++) {
-    if (letters.message[i].date === null) {
-        // console.log('null date');
-        letters.message[i].date = '';
-        
-    } else {
-        let now = new Date();
-        
-        let hours = new Date(letters.message[i].date).getHours();
-        let min = new Date(letters.message[i].date).getMinutes();
-
-        let day = new Date(letters.message[i].date).getDay();
-        let mon = new Date(letters.message[i].date).getMonth();
-        let year = new Date(letters.message[i].date).getFullYear();
-
-        if (now.getMonth() === mon 
-            && now.getDay() === day 
-            && now.getFullYear() === year) {
-            letters.message[i].date = hours + ':' + min;
-        } else {
-            let date = new Date(letters.message[i].date).toLocaleString('ru', {
-                day: 'numeric',
-                month: 'short'});
-            letters.message[i].date = date;
-        }
-    }    
 }

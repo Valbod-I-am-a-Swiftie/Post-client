@@ -34,6 +34,14 @@ i {
     margin: 10px;
 }
 
+.fa-plus-circle {
+    font-size: 30px;
+}
+
+.fa-redo-alt {
+    font-size: 26px;
+}
+
 .container {
     /* background-color: azure; */
     display: flex;
@@ -100,6 +108,14 @@ i {
     padding: 20px;
 }
 
+.buttons-container {
+    height: 150px;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
 .newLetter-button {
     border: black solid 1px;
 
@@ -116,6 +132,10 @@ i {
     padding: 0 50px;
 }
 
+.bold-button {
+    font-size: 30px;
+}
+
 .newLetter-button:hover {
     background-color: black;
     color: white;
@@ -123,10 +143,6 @@ i {
 
 .newLetter-button:focus {
     outline-style: none;
-}
-
-.fa-plus-circle {
-    font-size: 30px;
 }
 
 .back-button {
