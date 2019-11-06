@@ -23,42 +23,43 @@ public class ApiController {
         this.repository = repository;
     }
 
-    @GetMapping("/folders/{id}")
-    public List<String> getFolders(@PathVariable Long id) throws Exception {
-        User user = repository.findById(id).orElse(null);
-        ImapConnector connector =
-                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
-        return connector.getFolders();
-    }
-
-    @PostMapping("/mail/{id}")
-    public void sendMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception {
-        User user = repository.findById(id).orElse(null);
-        SmtpConnector smtpConnector =
-                new SmtpConnector(user.getMailLogin(), user.getMailPassword(), user.getSmtpAddr());
-        smtpConnector.sendEmail(message);
-        ImapConnector imapConnector =
-                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
-        imapConnector.saveSendMessage(message);
-    }
-
-    @GetMapping("/mail/{id}")
-    public List<PostMessage> getMail(@PathVariable Long id,
-            @RequestParam(name = "folder", required = false, defaultValue = "INBOX")
-                    String folderName) throws Exception {
-        User user = repository.findById(id).orElse(null);
-        ImapConnector imapConnector =
-                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
-        return imapConnector.getMailList(folderName);
-    }
-
-    @DeleteMapping("/mail/{id}")
-    public void deleteMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception {
-        User user = repository.findById(id).orElse(null);
-        ImapConnector imapConnector =
-                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
-        imapConnector.deleteMessage(message);
-    }
+//    @GetMapping("/folders/{id}")
+//    public List<String> getFolders(@PathVariable Long id) throws Exception {
+//        User user = repository.findById(id).orElse(null);
+//        ImapConnector connector =
+//                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+//        return connector.getFolders();
+//    }
+//
+//    @PostMapping("/mail/{id}")
+//    public void sendMail(@PathVariable Long id, @RequestBody PostMessage message) throws Exception {
+//        User user = repository.findById(id).orElse(null);
+//        SmtpConnector smtpConnector =
+//                new SmtpConnector(user.getMailLogin(), user.getMailPassword(), user.getSmtpAddr());
+//        smtpConnector.sendEmail(message);
+//        ImapConnector imapConnector =
+//                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+//        imapConnector.saveSendMessage(message);
+//    }
+//
+//    @GetMapping("/mail/{id}")
+//    public List<PostMessage> getMail(@PathVariable Long id,
+//            @RequestParam(name = "folder", required = false, defaultValue = "INBOX")
+//                    String folderName) throws Exception {
+//        User user = repository.findById(id).orElse(null);
+//        ImapConnector imapConnector =
+//                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+//        return imapConnector.getMailList(folderName);
+//    }
+//
+//    @DeleteMapping("/mail/{id}")
+//    public void deleteMail(@PathVariable Long id, @RequestBody PostMessage message)
+//            throws Exception {
+//        User user = repository.findById(id).orElse(null);
+//        ImapConnector imapConnector =
+//                new ImapConnector(user.getMailLogin(), user.getMailPassword(), user.getImapAddr());
+//        imapConnector.deleteMessage(message);
+//    }
 
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such user")
@@ -80,10 +81,27 @@ public class ApiController {
         return repository.findAll();
     }
 
+    @PostMapping("/users/{id}/mailboxes")
+    @ResponseStatus(HttpStatus.CREATED)
+    List<Mailbox> addMailbox(@RequestBody Mailbox newMailbox, @PathVariable Long id) {
+        var r = repository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+        r.addMailbox(newMailbox);
+        return repository.save(r).getMailboxes();
+    }
+
+    @GetMapping("/users/{id}/mailboxes")
+    @ResponseStatus(HttpStatus.OK)
+    List<Mailbox> allMailboxes(@PathVariable Long id) {
+        return repository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"))
+                .getMailboxes();
+    }
+
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     User newUser(@RequestBody User newUser) {
-        newUser.setDefaultFolders();
+        //newUser.setDefaultFolders();
         return repository.save(newUser);
     }
 
