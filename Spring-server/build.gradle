@@ -48,6 +48,5 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
-    compile "org.springframework.boot:spring-boot-configuration-processor"
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
