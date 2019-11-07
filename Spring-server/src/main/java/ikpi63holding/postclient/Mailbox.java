@@ -1,13 +1,29 @@
 package ikpi63holding.postclient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Data
 @Entity
 public class Mailbox {
 	@Id 
@@ -15,83 +31,50 @@ public class Mailbox {
         strategy= GenerationType.AUTO
     )
     private Long id;
+
+    @Column(nullable=false)
     private String mailLogin;
+
+    @Column(nullable=false)
     private String mailPassword;
+
+    @Column(nullable=false)
     private String smtpAddr;
+
+    @Column
     private int smtpPort;
+
+    @Column(nullable=false)
     private String imapAddr;
+
+    @Column
     private int imapPort;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @Column
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private String folders;
+
+    @ManyToOne
+    @JoinColumn
+    @JsonBackReference
     private User user;
 
-    Mailbox() {}
-
-    Mailbox(String mailLogin, String mailPassword, String smtpAddr, int smtpPort, String imapAddr,
-            int imapPort) {
-        this.mailLogin = mailLogin;
-        this.mailPassword = mailPassword;
-        this.smtpAddr = smtpAddr;
-        this.smtpPort = smtpPort;
-        this.imapAddr = imapAddr;
-        this.imapPort = imapPort;
+    Mailbox() {
+        folders = MailFolder.parseToString(MailFolder.defaultFolders());
     }
 
-    public Long getId() {
-        return this.id;
+    public List<MailFolder> getFolders(){
+        return MailFolder.parseToList(folders);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFolders(List<MailFolder> folderList){
+        folders = MailFolder.parseToString(folderList);
     }
 
-    public String getMailLogin() {
-        return this.mailLogin;
+    public void addFolder(MailFolder folder){
+        folders = MailFolder.appendFolder(folders, folder);
     }
 
-    public void setMailLogin(String mailLogin) {
-        this.mailLogin = mailLogin;
-    }
-
-    public String getMailPassword() {
-        return this.mailPassword;
-    }
-
-    public void setMailPassword(String mailPassword) {
-        this.mailPassword = mailPassword;
-    }
-
-    public String getSmtpAddr() {
-        return this.smtpAddr;
-    }
-
-    public void setSmtpAddr(String smtpAddr) {
-        this.smtpAddr = smtpAddr;
-    }
-
-    public int getSmtpPort() {
-        return this.smtpPort;
-    }
-
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
-
-    public String getImapAddr() {
-        return this.imapAddr;
-    }
-
-    public void setImapAddr(String imapAddr) {
-        this.imapAddr = imapAddr;
-    }
-
-    public int getImapPort() {
-        return this.imapPort;
-    }
-
-    public void setImapPort(int imapPort) {
-        this.imapPort = imapPort;
-    }
 
 }
