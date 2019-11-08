@@ -107,24 +107,6 @@ input {
   overflow: visible;
 }
 
-.focus-input {
-  position: absolute;
-  display: block;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-  top: -1px;
-  left: -1px;
-  pointer-events: none;
-  border: 1px solid #57b846;
-  border-radius: 3px;
-  visibility: hidden;
-  opacity: 0;
-
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-}
-
 .btn-show-pass {
   font-size: 15px;
   color: #999;
@@ -139,19 +121,37 @@ input {
   cursor: pointer;
 }
 
-.fa {
-  display: inline-block;
-  font-size: inherit;
-  text-rendering: auto;
-  margin: 0;
-  padding: 0;
+.btn-show-pass:hover {
+    color: #57b846;
+}
 
-  cursor: pointer;
-  float: right;
+.fas {
+    display: inline-block;
+    font-size: inherit;
+    text-rendering: auto;
+    margin: 0;
+    padding: 0;
+
+    cursor: pointer;
+    /* float: right; */
+}
+
+.far {
+    display: inline-block;
+    font-size: inherit;
+    text-rendering: auto;
+    margin: 0;
+    padding: 0;
+
+    cursor: pointer;
+    /* float: right; */
 }
 
 .fa-eye:before {
-  /* content: "\f06e"; */
+  content: "\f06e";
+}
+
+.fa-eye-slash:before {
   content: "\f070";
 }
 
@@ -175,47 +175,28 @@ input {
 }
 
 .input-checkbox {
-  /* display: none; */
-}
-
-.input-checkbox:checked + .input-checkbox-label {
-  font-weight: 600;
+  display: none;
 }
 
 .input-checkbox-label {
-  font-weight: 400;
-  font-size: 13px;
-  color: #999;
-  line-height: 1.4;
+    /* font-family: 'Raleway', sans-serif; */
+    font-weight: 400;
+    font-size: 13px;
+    color: #999;
+    line-height: 1.4;
 
-  display: block;
-  position: relative;
-  padding-left: 26px;
-  cursor: pointer;
+    display: block;
+    position: relative;
+    cursor: pointer;
 }
 
-/* .input-checkbox-label:before {
-  content: "\f00c";
-  font-family: FontAwesome;
-  font-size: 13px;
-  color: transpanent;
+.fa-check:before {
+    content: "\f00c";
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
-
-  background: #fff;
-  border: 1px solid #e6e6e6;
-
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-} */
+.fa-square:before {
+    content: "\f0c8";
+}
 
 .f-pass {
   font-weight: 400;
