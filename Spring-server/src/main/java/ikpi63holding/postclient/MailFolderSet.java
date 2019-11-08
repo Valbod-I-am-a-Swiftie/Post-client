@@ -1,8 +1,5 @@
 package ikpi63holding.postclient;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.ArrayList;
@@ -37,11 +34,12 @@ public class MailFolderSet {
         });
     }
 
-
     MailFolderSet(List<MailFolderJsonObject> jsonMap) {
-        if (jsonMap == null)
+        if (jsonMap == null) {
             return;
-        jsonMap.forEach(mailFolderJsonObject -> this.addFromString(mailFolderJsonObject.name, mailFolderJsonObject.type));
+        }
+        jsonMap.forEach(mailFolderJsonObject -> this
+                .addFromString(mailFolderJsonObject.name, mailFolderJsonObject.type));
     }
 
     public boolean contains(String name) {
@@ -96,11 +94,6 @@ public class MailFolderSet {
                 .collect(Collectors.toCollection(
                         ArrayList::new));
     }
-
-//    @JsonSetter("folders")
-//    public void setMap(List<MailFolderJsonObject> jsonMap) {
-//        jsonMap.forEach(mailFolderJsonObject -> this.addFromString(mailFolderJsonObject.name, mailFolderJsonObject.type));
-//    }
 
     @Override
     public String toString() {

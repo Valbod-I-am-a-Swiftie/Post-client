@@ -26,4 +26,5 @@ public class MailFolderSetSerializer extends StdSerializer<MailFolderSet> {
         }
         jsonGenerator.writeEndArray();
     }
+
 }
