@@ -117,6 +117,7 @@ public class ApiController {
         }
     }
 
+
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
     User registration(@RequestBody User newUser) {

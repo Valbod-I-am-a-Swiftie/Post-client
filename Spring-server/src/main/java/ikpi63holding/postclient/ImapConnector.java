@@ -1,6 +1,7 @@
 package ikpi63holding.postclient;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -9,13 +10,8 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import javax.mail.Flags;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Store;
+import javax.mail.*;
+import javax.mail.internet.MimeMultipart;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -99,6 +95,28 @@ public class ImapConnector {
             return ret;
         }
         return new ArrayList<>();
+    }
+
+    InputStream getFileFromMessage(String folderName, int messageNumber, String filename) throws NullPointerException,MessagingException, IOException {
+        Folder folder = this.store.getFolder(folderName);
+        if (folder.exists()) {
+            folder.open(Folder.READ_ONLY);
+
+            Message message = folder.getMessage(messageNumber);
+            MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
+            BodyPart bodyPart;
+
+            for (int i = 0; i < mimeMultipart.getCount(); i++) {
+                bodyPart = mimeMultipart.getBodyPart(i);
+                if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
+                    if (bodyPart.getFileName().equals(filename)) {
+                        return bodyPart.getInputStream();
+                    }
+                }
+            }
+
+        }
+        return null;
     }
 
     public void saveSendMessage(PostMessage message) throws MessagingException {
