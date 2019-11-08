@@ -97,6 +97,7 @@ public class ImapConnector {
         return new ArrayList<>();
     }
 
+
     InputStream getFileFromMessage(String folderName, int messageNumber, String filename) throws NullPointerException,MessagingException, IOException {
         Folder folder = this.store.getFolder(folderName);
         if (folder.exists()) {
@@ -119,22 +120,31 @@ public class ImapConnector {
         return null;
     }
 
-    public void saveSendMessage(PostMessage message) throws MessagingException {
-        Folder folder = this.store.getFolder("SentBox");
+
+    public void saveMessage(String folderName, PostMessage message) throws MessagingException {
+        Folder folder = this.store.getFolder(folderName);
+
         folder.open(Folder.READ_WRITE);
         Message email = message.toMessage(session);
         folder.appendMessages(new Message[] {email});
     }
 
-    public void deleteMessage(PostMessage message) throws MessagingException {
-        Folder folder = store.getFolder(message.getFolder());
+    public void moveMessage(String origFolder, String newFolder, int messageId)
+            throws MessagingException {
+        Folder folder = store.getFolder(origFolder);
         folder.open(Folder.READ_WRITE);
-        Message email = folder.getMessage(message.getNumberInFolder());
-        if (!message.getFolder().equals("Trash")) {
-            Folder trashFolder = store.getFolder("Trash");
-            trashFolder.open(Folder.READ_WRITE);
-            folder.copyMessages(new Message[] {email}, trashFolder);
-        }
+        Message email = folder.getMessage(messageId);
+        Folder trashFolder = store.getFolder(newFolder);
+        trashFolder.open(Folder.READ_WRITE);
+        folder.copyMessages(new Message[] {email}, trashFolder);
+        email.setFlag(Flags.Flag.DELETED, true);
+        folder.expunge();
+    }
+
+    public void deleteMessage(String folderName, int messageId) throws MessagingException {
+        Folder folder = store.getFolder(folderName);
+        folder.open(Folder.READ_WRITE);
+        Message email = folder.getMessage(messageId);
         email.setFlag(Flags.Flag.DELETED, true);
         folder.expunge();
     }

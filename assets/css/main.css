@@ -1,1 +1,175 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap');
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+li {
+    list-style-type: none;
+    display: flex;
+    width: auto;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+i {
+    display: flex;
+    font-size: 20px;
+    margin: 10px;
+}
+
+.fa-plus-circle {
+    font-size: 30px;
+}
+
+.fa-redo-alt {
+    font-size: 26px;
+}
+
+.container {
+    /* background-color: azure; */
+    display: flex;
+    margin: 50px;
+    width: 1250px;
+}
+
+.letters-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* width: 1250px; */
+}
+
+.letter-item {
+    margin-bottom: 5px;
+    border: black solid 1px;
+
+    display: flex;
+    cursor: pointer;
+}
+
+.letter-item:hover {
+    background-color: #e8e8e8;
+    font-weight: bold;
+}
+
+.letter-checkbox {
+    display: flex;
+    justify-content: center;
+}
+
+.letter-id {
+    display: none;
+}
+
+.letter-from {
+    margin: 10px;
+    width: 200px;
+}
+
+.letter-title {
+    margin: 10px;
+    width: 700px;
+}
+
+.letter-date {
+    visibility: visible;
+    float: right;
+    margin: 10px;
+    width: 50px;
+}
+
+.letter-delete {
+    visibility: visible;  
+    cursor: pointer;  
+    color: #949494;
+}
+
+.letter-container {
+    display: none;
+
+    background-color: #c4c4c4;
+    padding: 20px;
+}
+
+.buttons-container {
+    height: 150px;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.newLetter-button {
+    border: black solid 1px;
+
+    background-color: white;
+    color: black;
+    border-radius: 30px;
+
+    width: 40px;
+    height: 60px;
+
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    padding: 0 50px;
+}
+
+.bold-button {
+    font-size: 30px;
+}
+
+.newLetter-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.newLetter-button:focus {
+    outline-style: none;
+}
+
+.back-button {
+    border: black solid 1px;
+
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 30px;
+
+    width: 40px;
+    height: 60px;
+
+    display: flex;
+    justify-content: center;
+    padding: 0 50px;
+
+    margin: 10px;
+}
+
+.back-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.back-button:focus {
+    outline-style: none;
+}
 

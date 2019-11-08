@@ -1,0 +1,162 @@
+hr{
+    background-color: inherit;
+    color: black;
+
+    margin: 0;
+    padding: 0;
+}
+
+.newLetter-modal {
+    font-size: inherit;
+
+    position: fixed; 
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5); 
+    z-index: 1050;
+    opacity: 0; 
+    /* pointer-events: none;  */
+    margin: 0;
+    padding: 0;
+    display: none;
+}
+
+.newLetter-modal:target {
+    opacity: 1;
+    /* pointer-events: auto; */
+    overflow-y: auto;
+}
+
+.newLetter-modal-container {
+    position: relative;
+    width: auto;
+    height: auto;
+    padding: 50px;
+    margin: 0 50px;
+}
+
+@media (min-width: 576px) {
+    .modal-container {
+        max-width: 500px;
+        margin: 50px auto;
+    }
+}
+
+.newLetter-modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.newLetter-modal-header {
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.newLetter-modal-title {
+    padding: 5px;
+}
+
+.cancel-button {
+    height: auto;
+    width: auto;
+}
+
+.newLetter-modal-body {
+    background-color: white;
+    padding: 10px 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.recipient-container {
+    height: 40px;
+    width: auto;
+
+    margin: 5px 0;
+}
+
+.recipients {
+    height: 100%;
+    width: 100%;
+
+    border: none;
+}
+
+.recipients:focus {
+    outline-style: none;
+}
+
+
+.subject-container {
+    height: 40px;
+    width: auto;
+
+    margin: 5px 0;
+}
+
+.subject {    
+    height: 100%;
+    width: 100%;
+
+    border: none;
+}
+
+.subject:focus {
+    outline-style: none;
+}
+
+
+.text-container {
+    height: 100px;
+    width: auto;
+
+    margin: 5px 0;
+}
+
+.area {
+    height: 100%;
+    width: 100%;
+
+    border: none;
+}
+
+.area:focus {
+    outline-style: none;
+}
+
+.newLetter-modal-footer {
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-button {
+    cursor: pointer;
+    border: black solid 1px;
+
+    border-radius: 30px;
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    padding: 10px 20px;
+    margin: 10px;
+}
+
+.modal-button:hover {
+    background-color: white;
+    color: black;
+}
+
+.modal-button:focus {
+    outline-style: none;
+}

@@ -41,9 +41,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtProperties,
                         userRepository))
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/registration").permitAll()
-                .antMatchers("/*").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/registration").permitAll()
+                .antMatchers("/api/**/*").hasRole("USER")
+                .antMatchers("/**/*{.html|.css|.js|.vue}").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated();
 
     }

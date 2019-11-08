@@ -107,24 +107,6 @@ input {
   overflow: visible;
 }
 
-/* .focus-input {
-  position: absolute;
-  display: block;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-  top: -1px;
-  left: -1px;
-  pointer-events: none;
-  border: 1px solid #57b846;
-  border-radius: 3px;
-  visibility: hidden;
-  opacity: 0;
-
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-} */
-
 .btn-show-pass {
   font-size: 15px;
   color: #999;
@@ -144,7 +126,6 @@ input {
 }
 
 .fas {
-    /* font-family: 'Raleway', sans-serif; */
     display: inline-block;
     font-size: inherit;
     text-rendering: auto;
@@ -152,7 +133,7 @@ input {
     padding: 0;
 
     cursor: pointer;
-    float: right;
+    /* float: right; */
 }
 
 .far {
@@ -163,7 +144,7 @@ input {
     padding: 0;
 
     cursor: pointer;
-    float: right;
+    /* float: right; */
 }
 
 .fa-eye:before {
@@ -195,11 +176,6 @@ input {
 
 .input-checkbox {
   display: none;
-}
-
-.input-checkbox:checked + .input-checkbox-label {
-  /* font-weight: 400; */
-  /* font-family: 'Raleway', sans-serif; */
 }
 
 .input-checkbox-label {
