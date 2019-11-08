@@ -1,121 +1,58 @@
 package ikpi63holding.postclient;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.List;
+import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.ElementCollection;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
 @Entity
 public class User {
-    private @Id @GeneratedValue Long id;
-    private String username;
-    private String password;
-    private String mailLogin;
-    private String mailPassword;
-    private String smtpAddr;
-    private int smtpPort;
-    private String imapAddr;
-    private int imapPort;
+    @Id
+    @GeneratedValue(
+        strategy= GenerationType.AUTO, 
+        generator="native"
+    )
+    private Long id;
 
+    @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+ 
     private int active;
 
     private String roles = "";
 
     private String permissions = "";
+  
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
+    @JsonManagedReference
+    private List<Mailbox> mailboxes;
 
-    User() {}
-
-    User(String username, String password, String mailLogin, String mailPassword,
-            String smtpAddr,int smtpPort,
-            String imapAddr, int imapPort,
-            String roles, String permissions) {
-        this.username = username;
-        this.password = password;
-        this.mailLogin = mailLogin;
-        this.mailPassword = mailPassword;
-        this.smtpAddr = smtpAddr;
-        this.smtpPort = smtpPort;
-        this.imapAddr = imapAddr;
-        this.imapPort = imapPort;
-
-        this.roles = roles;
-        this.permissions = permissions;
-        this.active = 1;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getMailLogin() {
-        return this.mailLogin;
-    }
-
-    public void setMailLogin(String mailLogin) {
-        this.mailLogin = mailLogin;
-    }
-
-    public String getMailPassword() {
-        return this.mailPassword;
-    }
-
-    public void setMailPassword(String mailPassword) {
-        this.mailPassword = mailPassword;
-    }
-
-    public String getSmtpAddr() {
-        return this.smtpAddr;
-    }
-
-    public void setSmtpAddr(String smtpAddr) {
-        this.smtpAddr = smtpAddr;
-    }
-
-    public int getSmtpPort() {
-        return this.smtpPort;
-    }
-
-    public void setSmtpPort(int smtpPort) {
-        this.smtpPort = smtpPort;
-    }
-
-    public String getImapAddr() {
-        return this.imapAddr;
-    }
-
-    public void setImapAddr(String imapAddr) {
-        this.imapAddr = imapAddr;
-    }
-
-    public int getImapPort() {
-        return this.imapPort;
-    }
-
-    public void setImapPort(int imapPort) {
-        this.imapPort = imapPort;
+    public void addMailbox(Mailbox mailbox) {
+        this.mailboxes.add(mailbox);
+        mailbox.setUser(this);
     }
 
     // New methods for auth
