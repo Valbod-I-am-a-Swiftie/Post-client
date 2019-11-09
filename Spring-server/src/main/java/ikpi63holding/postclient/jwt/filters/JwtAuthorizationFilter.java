@@ -1,7 +1,9 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.jwt.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import ikpi63holding.postclient.jwt.JwtProperties;
+import ikpi63holding.postclient.jwt.userprincipial.UserPrincipalDetailsService;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,18 +13,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JwtProperties jwtProperties;
-    private final UserRepository userRepository;
+    private final UserPrincipalDetailsService principalDetailsService;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
-            JwtProperties jwtProperties, UserRepository userRepository) {
+            JwtProperties jwtProperties, UserPrincipalDetailsService detailsService) {
         super(authenticationManager);
         this.jwtProperties = jwtProperties;
-        this.userRepository = userRepository;
+        this.principalDetailsService = detailsService;
     }
 
     @Override
@@ -53,11 +56,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (userName != null) {
-                User user = userRepository.findByUsername(userName);
-                UserPrincipal principal = new UserPrincipal(user);
+                UserDetails userDetails = principalDetailsService.loadUserByUsername(userName);
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(userName, null,
-                                principal.getAuthorities());
+                                userDetails.getAuthorities());
                 return auth;
             }
             return null;

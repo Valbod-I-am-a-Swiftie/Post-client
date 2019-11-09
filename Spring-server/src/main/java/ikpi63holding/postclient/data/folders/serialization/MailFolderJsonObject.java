@@ -1,4 +1,4 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.data.folders.serialization;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

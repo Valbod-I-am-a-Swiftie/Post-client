@@ -1,5 +1,9 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.mail;
 
+import ikpi63holding.postclient.data.folders.FolderType;
+import ikpi63holding.postclient.data.maibox.Mailbox;
+import ikpi63holding.postclient.mail.connectors.ImapConnector;
+import ikpi63holding.postclient.mail.connectors.SmtpConnector;
 import java.util.List;
 
 public class MailService {

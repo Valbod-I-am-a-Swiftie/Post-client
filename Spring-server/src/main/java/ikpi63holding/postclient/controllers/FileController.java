@@ -1,5 +1,9 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.controllers;
 
+import ikpi63holding.postclient.mail.connectors.ImapConnector;
+import ikpi63holding.postclient.data.maibox.Mailbox;
+import ikpi63holding.postclient.data.maibox.MailboxRepository;
+import ikpi63holding.postclient.mail.MediaTypeUtils;
 import java.io.InputStream;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;

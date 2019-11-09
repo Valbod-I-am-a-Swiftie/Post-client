@@ -1,5 +1,6 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.jwt.userprincipial;
 
+import ikpi63holding.postclient.data.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,5 +1,6 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.mail.connectors;
 
+import ikpi63holding.postclient.mail.PostMessage;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -38,7 +39,7 @@ public class SmtpConnector {
 
     public Session SmtpSession;
 
-    SmtpConnector(String userName, String password, String host) throws Exception {
+    public SmtpConnector(String userName, String password, String host) throws Exception {
         this.SmtpSession = this.getSmtpSession(userName, password, host);
     }
 

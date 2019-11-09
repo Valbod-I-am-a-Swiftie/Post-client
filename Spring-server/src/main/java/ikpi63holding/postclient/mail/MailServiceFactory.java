@@ -1,5 +1,6 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.mail;
 
+import ikpi63holding.postclient.data.maibox.Mailbox;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Service;
 @NoArgsConstructor
 public class MailServiceFactory {
 
-    MailService getService(Mailbox mailbox) throws Exception {
+    public MailService getService(Mailbox mailbox) throws Exception {
         return new MailService(mailbox);
     }
 

@@ -1,6 +1,8 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.data.maibox;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import ikpi63holding.postclient.data.folders.MailFolderSet;
+import ikpi63holding.postclient.data.user.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

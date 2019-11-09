@@ -1,10 +1,11 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.data.folders.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import ikpi63holding.postclient.data.folders.MailFolderSet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

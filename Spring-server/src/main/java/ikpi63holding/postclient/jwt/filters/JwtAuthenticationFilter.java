@@ -1,8 +1,11 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.jwt.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ikpi63holding.postclient.data.user.User;
+import ikpi63holding.postclient.jwt.JwtProperties;
+import ikpi63holding.postclient.jwt.userprincipial.UserPrincipal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +28,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             JwtProperties jwtProperties) {
         this.authenticationManager = authenticationManager;
         this.jwtProperties = jwtProperties;
+        // We can set login endpoint here
+        //setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/logme", "POST"));
     }
 
     @Override

@@ -1,5 +1,12 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.controllers;
 
+import ikpi63holding.postclient.data.folders.MailFolderSet;
+import ikpi63holding.postclient.mail.MailServiceFactory;
+import ikpi63holding.postclient.data.maibox.Mailbox;
+import ikpi63holding.postclient.data.maibox.MailboxRepository;
+import ikpi63holding.postclient.mail.PostMessage;
+import ikpi63holding.postclient.data.user.User;
+import ikpi63holding.postclient.data.user.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

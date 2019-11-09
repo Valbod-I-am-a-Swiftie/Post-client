@@ -1,4 +1,4 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.mail;
 
 import javax.servlet.ServletContext;
 import org.springframework.http.MediaType;

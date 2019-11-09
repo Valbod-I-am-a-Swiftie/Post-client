@@ -1,4 +1,4 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.mail;
 
 import java.io.IOException;
 import java.util.ArrayList;
