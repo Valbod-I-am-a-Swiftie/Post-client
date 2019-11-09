@@ -192,23 +192,16 @@ public class ApiController {
     User registration(@RequestBody User newUser) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         
-        if (this.repository.findByUsername(newUser.getUsername()) != null) {
+        if (this.userRepository.findByUsername(newUser.getUsername()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                                               "User " + newUser.getUsername() + " already exists");
         }
 
-        return repository.save(new User(
-            newUser.getUsername(),
-            passwordEncoder.encode(newUser.getPassword()),
-            newUser.getMailLogin(),
-            newUser.getMailPassword(),
-            newUser.getSmtpAddr(),
-            newUser.getSmtpPort(),
-            newUser.getImapAddr(),
-            newUser.getImapPort(),
-            "USER",
-            ""
-        ));
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newUser.setRoles("USER");
+        newUser.setPermissions("");
+
+        return userRepository.save(newUser);
     }
 
 }
