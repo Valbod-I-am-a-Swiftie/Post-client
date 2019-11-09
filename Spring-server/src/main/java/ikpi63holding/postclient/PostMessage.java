@@ -1,12 +1,22 @@
 package ikpi63holding.postclient;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.mail.Address;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
 public class PostMessage {
 
@@ -68,7 +78,7 @@ public class PostMessage {
             return content.toString();
         }
         if (this.contentType.contains("multipart")) {
-            Map<String,Object> ret = new HashMap<>();
+            Map<String, Object> ret = new HashMap<>();
             MimeMultipart mimeMultipart = (MimeMultipart) content;
             BodyPart bodyPart;
             int count = 0;
@@ -87,13 +97,13 @@ public class PostMessage {
 
                         files.add(folder + "/" + numberInFolder + "/" + bodyPart.getFileName());
                     } else {
-                        ret.put(Integer.toString(i),bodyPart.getContent());
+                        ret.put(Integer.toString(i), bodyPart.getContent());
                     }
                 } catch (MessagingException | IOException e) {
                     e.printStackTrace();
                 }
             }
-            ret.put("files",files);
+            ret.put("files", files);
             return ret;
         }
 

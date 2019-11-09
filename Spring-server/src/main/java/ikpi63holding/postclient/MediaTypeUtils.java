@@ -1,14 +1,14 @@
 package ikpi63holding.postclient;
 
 import javax.servlet.ServletContext;
-
 import org.springframework.http.MediaType;
 
 public class MediaTypeUtils {
 
     // abc.zip
     // abc.pdf,..
-    public static MediaType getMediaTypeForFileName(ServletContext servletContext, String fileName) {
+    public static MediaType getMediaTypeForFileName(ServletContext servletContext,
+            String fileName) {
         // application/pdf
         // application/xml
         // image/gif, ...

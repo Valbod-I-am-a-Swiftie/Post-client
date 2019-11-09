@@ -10,7 +10,15 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import javax.mail.*;
+import javax.mail.BodyPart;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Store;
 import javax.mail.internet.MimeMultipart;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
@@ -97,8 +105,8 @@ public class ImapConnector {
         return new ArrayList<>();
     }
 
-
-    InputStream getFileFromMessage(String folderName, int messageNumber, String filename) throws NullPointerException,MessagingException, IOException {
+    InputStream getFileFromMessage(String folderName, int messageNumber, String filename)
+            throws NullPointerException, MessagingException, IOException {
         Folder folder = this.store.getFolder(folderName);
         if (folder.exists()) {
             folder.open(Folder.READ_ONLY);
@@ -119,7 +127,6 @@ public class ImapConnector {
         }
         return null;
     }
-
 
     public void saveMessage(String folderName, PostMessage message) throws MessagingException {
         Folder folder = this.store.getFolder(folderName);
