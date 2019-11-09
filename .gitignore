@@ -1,3 +1,5 @@
 Spring-server/.*
 *.iml
 Spring-server/build/
+Spring-server/lombok.config
+Spring-server/config/*.properties
