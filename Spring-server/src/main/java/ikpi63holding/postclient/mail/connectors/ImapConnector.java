@@ -1,5 +1,6 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.mail.connectors;
 
+import ikpi63holding.postclient.mail.PostMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -47,7 +48,7 @@ public class ImapConnector {
     private Session session;
     private Store store;
 
-    ImapConnector(String login, String password, String host) throws Exception {
+    public ImapConnector(String login, String password, String host) throws Exception {
 
         this.session = getImapSession(login, password);
         this.store = this.session.getStore();
@@ -88,7 +89,7 @@ public class ImapConnector {
         return folders;
     }
 
-    List<PostMessage> getMailList(String folderName) throws MessagingException, IOException {
+    public List<PostMessage> getMailList(String folderName) throws MessagingException, IOException {
 
         Folder folder = this.store.getFolder(folderName);
         if (folder.exists()) {
@@ -105,7 +106,7 @@ public class ImapConnector {
         return new ArrayList<>();
     }
 
-    InputStream getFileFromMessage(String folderName, int messageNumber, String filename)
+    public InputStream getFileFromMessage(String folderName, int messageNumber, String filename)
             throws NullPointerException, MessagingException, IOException {
         Folder folder = this.store.getFolder(folderName);
         if (folder.exists()) {

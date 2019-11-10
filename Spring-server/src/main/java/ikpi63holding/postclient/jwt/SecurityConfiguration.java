@@ -1,5 +1,8 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.jwt;
 
+import ikpi63holding.postclient.jwt.filters.JwtAuthenticationFilter;
+import ikpi63holding.postclient.jwt.filters.JwtAuthorizationFilter;
+import ikpi63holding.postclient.jwt.userprincipial.UserPrincipalDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +23,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserPrincipalDetailsService userPrincipalDetailsService;
     @Autowired
     private JwtProperties jwtProperties;
-    @Autowired
-    private UserRepository userRepository;
 
     public SecurityConfiguration() {
     }
@@ -39,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProperties))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtProperties,
-                        userRepository))
+                        userPrincipalDetailsService))
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/registration").permitAll()

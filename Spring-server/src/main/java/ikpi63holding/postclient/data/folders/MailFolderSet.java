@@ -1,7 +1,10 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.data.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ikpi63holding.postclient.data.folders.serialization.MailFolderJsonObject;
+import ikpi63holding.postclient.data.folders.serialization.MailFolderSetDeserializer;
+import ikpi63holding.postclient.data.folders.serialization.MailFolderSetSerializer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -22,7 +25,7 @@ public class MailFolderSet {
     private Set<String> nameSet = new TreeSet<>();
     private Map<FolderType, String> typeMap = new EnumMap<>(FolderType.class);
 
-    MailFolderSet(String parse) {
+    public MailFolderSet(String parse) {
         Arrays.stream(parse.split(LIST_DELIM)).forEach(s -> {
             var parts = s.split(TYPE_DELIM);
             if (parts.length > 1) {
@@ -34,12 +37,12 @@ public class MailFolderSet {
         });
     }
 
-    MailFolderSet(List<MailFolderJsonObject> jsonMap) {
+    public MailFolderSet(List<MailFolderJsonObject> jsonMap) {
         if (jsonMap == null) {
             return;
         }
         jsonMap.forEach(mailFolderJsonObject -> this
-                .addFromString(mailFolderJsonObject.name, mailFolderJsonObject.type));
+                .addFromString(mailFolderJsonObject.getName(), mailFolderJsonObject.getType()));
     }
 
     public boolean contains(String name) {

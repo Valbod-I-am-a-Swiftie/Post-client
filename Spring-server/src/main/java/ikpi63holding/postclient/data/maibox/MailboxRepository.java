@@ -1,7 +1,9 @@
-package ikpi63holding.postclient;
+package ikpi63holding.postclient.data.maibox;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 interface MailboxRepository extends JpaRepository<Mailbox, Long> {
 
 }
