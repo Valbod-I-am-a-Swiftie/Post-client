@@ -2,6 +2,7 @@ package ikpi63holding.postclient.jwt.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import ikpi63holding.postclient.jwt.JwtProperties;
 import ikpi63holding.postclient.jwt.userprincipial.UserPrincipalDetailsService;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -50,17 +52,25 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 .replace(jwtProperties.tokenPrefix, "");
 
         if (token != null) {
-            String userName = JWT.require(Algorithm.HMAC512(jwtProperties.secret.getBytes()))
-                    .build()
-                    .verify(token)
-                    .getSubject();
-
+            String userName = null;
+            try {
+                userName = JWT.require(Algorithm.HMAC512(jwtProperties.secret.getBytes()))
+                        .build()
+                        .verify(token)
+                        .getSubject();
+            } catch (JWTVerificationException e){
+                return null;
+            }
             if (userName != null) {
-                UserDetails userDetails = principalDetailsService.loadUserByUsername(userName);
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(userName, null,
-                                userDetails.getAuthorities());
-                return auth;
+                try {
+                    UserDetails userDetails = principalDetailsService.loadUserByUsername(userName);
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(userName, null,
+                                    userDetails.getAuthorities());
+                    return auth;
+                } catch (UsernameNotFoundException e){
+                    return null;
+                }
             }
             return null;
         }
