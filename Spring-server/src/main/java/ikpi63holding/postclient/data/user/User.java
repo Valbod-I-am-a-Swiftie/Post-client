@@ -23,6 +23,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 public class User {
 
+    private static final int DEFAULT_ID = 0;
+
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -52,13 +54,13 @@ public class User {
         // TODO: later check for unique emailLogin here, and maybe throw otherwise
         //  @Max
         int maxId = mailboxes.stream().map(Mailbox::getId)
-                .reduce(BinaryOperator.maxBy(Integer::compareTo)).orElse(0);
+                .reduce(BinaryOperator.maxBy(Integer::compareTo)).orElse(DEFAULT_ID);
         mailbox.setUser(this);
         mailbox.setId(++maxId);
         this.mailboxes.add(mailbox);
     }
 
-    public Optional<Mailbox> getMailbox(int id){
+    public Optional<Mailbox> getMailbox(int id) {
         return mailboxes.stream().filter(mailbox -> mailbox.getId() == id).findAny();
     }
 
