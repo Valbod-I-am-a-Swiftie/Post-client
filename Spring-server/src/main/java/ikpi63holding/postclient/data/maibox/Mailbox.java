@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -49,7 +48,6 @@ public class Mailbox {
     @Id
     @ManyToOne
     @JoinColumn
-    @OrderBy
     @JsonBackReference
     private User user;
 
