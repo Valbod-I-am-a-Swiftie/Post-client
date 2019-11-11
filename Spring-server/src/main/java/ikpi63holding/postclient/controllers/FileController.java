@@ -42,7 +42,10 @@ public class FileController {
         User user = userRepository.findByUsername(userName).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
 
-        Mailbox mailbox = user.getMailboxes().get(mailboxId - 1);
+        Mailbox mailbox = user.getMailbox(mailboxId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No mailbox for " + userName + " with id " + mailboxId));
+
         ImapConnector imapConnector =
                 new ImapConnector(mailbox.getMailLogin(), mailbox.getMailPassword(),
                         mailbox.getImapAddr());

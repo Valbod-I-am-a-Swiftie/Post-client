@@ -53,9 +53,8 @@ public class User {
         //  @Max
         int maxId = mailboxes.stream().map(Mailbox::getId)
                 .reduce(BinaryOperator.maxBy(Integer::compareTo)).orElse(0);
-        int newId = maxId + 1;
         mailbox.setUser(this);
-        mailbox.setId(newId);
+        mailbox.setId(++maxId);
         this.mailboxes.add(mailbox);
     }
 
