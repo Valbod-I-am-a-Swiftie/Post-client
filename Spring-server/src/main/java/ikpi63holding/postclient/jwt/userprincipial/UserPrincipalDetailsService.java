@@ -1,6 +1,5 @@
 package ikpi63holding.postclient.jwt.userprincipial;
 
-import ikpi63holding.postclient.data.user.User;
 import ikpi63holding.postclient.data.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,8 +16,9 @@ public class UserPrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = this.userRepository.findByUsername(s);
-        return new UserPrincipal(user);
+        return new UserPrincipal(this.userRepository.findByUsername(s).orElseThrow(
+                () -> new UsernameNotFoundException("User " + s + " not found")
+        ));
     }
 
 }

@@ -1,20 +1,23 @@
 package ikpi63holding.postclient.controllers;
 
-import ikpi63holding.postclient.mail.connectors.ImapConnector;
 import ikpi63holding.postclient.data.maibox.Mailbox;
-import ikpi63holding.postclient.data.maibox.MailboxRepository;
+import ikpi63holding.postclient.data.user.User;
+import ikpi63holding.postclient.data.user.UserRepository;
 import ikpi63holding.postclient.mail.MediaTypeUtils;
+import ikpi63holding.postclient.mail.connectors.ImapConnector;
 import java.io.InputStream;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 public class FileController {
@@ -23,22 +26,26 @@ public class FileController {
     @Autowired
     private ServletContext servletContext;
 
-    private final MailboxRepository repository;
+    private final UserRepository userRepository;
 
-    FileController(MailboxRepository repository) {
-        this.repository = repository;
+    FileController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @GetMapping("/files/{id}/{folder}/{messageId}/{filename}")
+    @GetMapping("/files/{userName}/{mailboxId}/{folder}/{messageId}/{filename}")
     @ResponseBody
-    public ResponseEntity<InputStreamResource> serveFile(@PathVariable long id,
+    public ResponseEntity<InputStreamResource> serveFile(@PathVariable String userName,
+            @PathVariable int mailboxId,
             @PathVariable String folder, @PathVariable int messageId, @PathVariable String filename)
             throws Exception {
         MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, filename);
-        Mailbox mailbox = repository.findById(id).orElse(null);
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+
+        Mailbox mailbox = user.getMailboxes().get(mailboxId - 1);
         ImapConnector imapConnector =
                 new ImapConnector(mailbox.getMailLogin(), mailbox.getMailPassword(),
-                        mailbox.getSmtpAddr());
+                        mailbox.getImapAddr());
         InputStream inputStream = imapConnector.getFileFromMessage(folder, messageId, filename);
         InputStreamResource resource = new InputStreamResource(inputStream);
 
