@@ -19,10 +19,5 @@ public class JwtProperties {
         this.expirationTime = expirationTime;
         this.tokenPrefix = tokenPrefix + ' ';
         this.headerString = headerString;
-
-        System.out.println(this.secret);
-        System.out.println(this.expirationTime);
-        System.out.println(this.tokenPrefix);
-        System.out.println(this.headerString);
     }
 }

@@ -5,9 +5,8 @@ import ikpi63holding.postclient.data.folders.MailFolderSet;
 import ikpi63holding.postclient.data.user.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
@@ -17,12 +16,11 @@ import lombok.Setter;
 
 @Data
 @Entity
+@IdClass(MailboxKey.class)
 public class Mailbox {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.AUTO
-    )
-    private Long id;
+    @Column(updatable = false, insertable = false, nullable = false)
+    private int id;
 
     @Column(nullable = false)
     private String mailLogin;
@@ -47,6 +45,7 @@ public class Mailbox {
     @Getter(AccessLevel.NONE)
     private String folders = "";
 
+    @Id
     @ManyToOne
     @JoinColumn
     @JsonBackReference

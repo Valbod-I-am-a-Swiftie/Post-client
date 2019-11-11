@@ -1,12 +1,11 @@
 package ikpi63holding.postclient.controllers;
 
 import ikpi63holding.postclient.data.folders.MailFolderSet;
-import ikpi63holding.postclient.mail.MailServiceFactory;
 import ikpi63holding.postclient.data.maibox.Mailbox;
-import ikpi63holding.postclient.data.maibox.MailboxRepository;
-import ikpi63holding.postclient.mail.PostMessage;
 import ikpi63holding.postclient.data.user.User;
 import ikpi63holding.postclient.data.user.UserRepository;
+import ikpi63holding.postclient.mail.MailServiceFactory;
+import ikpi63holding.postclient.mail.PostMessage;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,110 +28,117 @@ public class ApiController {
 
     private final UserRepository userRepository;
 
-    private final MailboxRepository mailboxRepository;
-
     @Autowired
     private MailServiceFactory mailServiceFactory;
 
     @Autowired
-    ApiController(UserRepository userRepository, MailboxRepository mailboxRepository) {
+    ApiController(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.mailboxRepository = mailboxRepository;
     }
 
-    @PostMapping("/users/{userId}/mailboxes/{mailboxId}")
-    public void sendMail(@PathVariable Long userId, @PathVariable Long mailboxId,
+    @PostMapping("/users/{userName}/mailboxes/{mailboxId}")
+    public void sendMail(@PathVariable String userName, @PathVariable int mailboxId,
             @RequestBody PostMessage message) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+        // TODO: remake this logic, I think we should put emails to folder
+        //  and decide on action based on folder type
+        //  @Max
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
 
-        Mailbox mailbox = mailboxRepository.findById(mailboxId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such mailbox"));
+        Mailbox mailbox = user.getMailbox(mailboxId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No mailbox for " + userName + " with id " + mailboxId));
 
         var mailService = mailServiceFactory.getService(mailbox);
         mailService.sendMail(message);
-
     }
 
-    @GetMapping("/users/{userId}/mailboxes/{mailboxId}/folders/{folderName}/mail")
+    @GetMapping("/users/{userName}/mailboxes/{mailboxId}/folders/{folderName}/mail")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostMessage> getMailList(@PathVariable Long userId, @PathVariable Long mailboxId,
+    public List<PostMessage> getMailList(@PathVariable String userName, @PathVariable int mailboxId,
             @PathVariable String folderName) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
 
-        Mailbox mailbox = mailboxRepository.findById(mailboxId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such mailbox"));
+        Mailbox mailbox = user.getMailbox(mailboxId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No mailbox for " + userName + " with id " + mailboxId));
 
         var mailService = mailServiceFactory.getService(mailbox);
         return mailService.getMailList(folderName);
     }
 
-    @GetMapping("/users/{userId}/mailboxes/{mailboxId}/folders")
+    @GetMapping("/users/{userName}/mailboxes/{mailboxId}/folders")
     @ResponseStatus(HttpStatus.OK)
-    public MailFolderSet getFolders(@PathVariable Long userId, @PathVariable Long mailboxId)
-            throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+    public MailFolderSet getFolders(@PathVariable String userName, @PathVariable int mailboxId) {
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
 
-        Mailbox mailbox = mailboxRepository.findById(mailboxId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such mailbox"));
-
-        var mailService = mailServiceFactory.getService(mailbox);
-        mailService.updateFolders();
-        return mailboxRepository.save(mailbox).getFolders();
+        return user.getMailbox(mailboxId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No mailbox for " + userName + " with id " + mailboxId)).getFolders();
     }
 
-    @PutMapping("/users/{userId}/mailboxes/{mailboxId}/folders")
+    @PutMapping("/users/{userName}/mailboxes/{mailboxId}/folders")
     @ResponseStatus(HttpStatus.OK)
     public MailFolderSet putFolders(@RequestBody MailFolderSet newMailFolderSet,
-            @PathVariable Long userId, @PathVariable Long mailboxId)
+            @PathVariable String userName, @PathVariable int mailboxId)
             throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+        // TODO: this seems to make more sense as a POST request
+        //  @Max
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
 
-        Mailbox mailbox = mailboxRepository.findById(mailboxId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such mailbox"));
+        Mailbox mailbox = user.getMailbox(mailboxId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No mailbox for " + userName + " with id " + mailboxId));
+
         mailbox.setFolders(newMailFolderSet);
         var mailService = mailServiceFactory.getService(mailbox);
         mailService.updateFolders();
-        return mailboxRepository.save(mailbox).getFolders();
+        userRepository.save(user);
+        return mailbox.getFolders();
     }
 
-    @GetMapping("/users/{userId}/mailboxes/{mailboxId}")
-    public Mailbox getMailbox(@PathVariable Long userId, @PathVariable Long mailboxId)
-            throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+    @GetMapping("/users/{userName}/mailboxes/{mailboxId}")
+    public Mailbox getMailbox(@PathVariable String userName, @PathVariable int mailboxId) {
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
 
-        Mailbox mailbox = mailboxRepository.findById(mailboxId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such mailbox"));
-
-        var mailService = mailServiceFactory.getService(mailbox);
-        return mailboxRepository.save(mailbox);
+        return user.getMailbox(mailboxId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No mailbox for " + userName + " with id " + mailboxId));
     }
 
-    @DeleteMapping("/users/{userId}/mailboxes/{mailboxId}/folders/{folderName}/mail/{mailId}")
-    public void deleteMail(@PathVariable Long userId, @PathVariable Long mailboxId,
+    @DeleteMapping("/users/{userName}/mailboxes/{mailboxId}/folders/{folderName}/mail/{mailId}")
+    public void deleteMail(@PathVariable String userName, @PathVariable int mailboxId,
             @PathVariable String folderName, @PathVariable
             int mailId)
             throws Exception {
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
 
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+        Mailbox mailbox = user.getMailbox(mailboxId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No mailbox for " + userName + " with id " + mailboxId));
 
-        Mailbox mailbox = mailboxRepository.findById(mailboxId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such mailbox"));
         var mailService = mailServiceFactory.getService(mailbox);
         mailService.deleteMail(folderName, mailId);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/{userName}")
     @ResponseStatus(HttpStatus.OK)
-    User uniqueUser(@PathVariable Long id) {
-        return userRepository.findById(id)
+    User uniqueUser(@PathVariable String userName) {
+        return userRepository.findByUsername(userName)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                "No user with name" + userName));
     }
 
     @GetMapping("/users")
@@ -141,20 +147,23 @@ public class ApiController {
         return userRepository.findAll();
     }
 
-    @PostMapping("/users/{id}/mailboxes")
+    @PostMapping("/users/{userName}/mailboxes")
     @ResponseStatus(HttpStatus.CREATED)
-    List<Mailbox> addMailbox(@RequestBody Mailbox newMailbox, @PathVariable Long id) {
-        var r = userRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
-        r.addMailbox(newMailbox);
-        return userRepository.save(r).getMailboxes();
+    List<Mailbox> addMailbox(@RequestBody Mailbox newMailbox, @PathVariable String userName) {
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
+
+        user.addMailbox(newMailbox);
+        return userRepository.save(user).getMailboxes();
     }
 
-    @GetMapping("/users/{id}/mailboxes")
+    @GetMapping("/users/{userName}/mailboxes")
     @ResponseStatus(HttpStatus.OK)
-    List<Mailbox> allMailboxes(@PathVariable Long id) {
-        return userRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"))
+    List<Mailbox> allMailboxes(@PathVariable String userName) {
+        return userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName))
                 .getMailboxes();
     }
 
@@ -164,17 +173,18 @@ public class ApiController {
         return userRepository.save(newUser);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/users/{userName}")
     @ResponseStatus(HttpStatus.OK)
-    User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-        return userRepository.findById(id)
+    User replaceUser(@RequestBody User newUser, @PathVariable String userName) {
+        return userRepository.findByUsername(userName)
                 .map(user -> {
                     user.setUsername(newUser.getUsername());
                     user.setPassword(newUser.getPassword());
                     return userRepository.save(user);
                 })
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user"));
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                "No user with name" + userName));
     }
 
     @DeleteMapping("/users")
@@ -183,30 +193,33 @@ public class ApiController {
         // It's forbidden to delete the whole collection
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/users/{userName}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteUser(@PathVariable Long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user");
-        }
-    }
+    void deleteUser(@PathVariable String userName) {
+        User user = userRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No user with name" + userName));
 
+        // To protect against accidental deletes
+        //  @Max
+        user.setActive(0);
+    }
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
     User registration(@RequestBody User newUser) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        
-        if (this.userRepository.findByUsername(newUser.getUsername()) != null) {
+
+        if (userRepository.existsByUsername(newUser.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                                              "User " + newUser.getUsername() + " already exists");
+                    "User " + newUser.getUsername() + " already exists");
+
         }
 
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         newUser.setRoles("USER");
         newUser.setPermissions("");
+        newUser.setActive(1);
 
         return userRepository.save(newUser);
     }
