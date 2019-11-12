@@ -2,7 +2,6 @@ package ikpi63holding.postclient.jwt;
 
 import ikpi63holding.postclient.jwt.filters.JwtAuthenticationFilter;
 import ikpi63holding.postclient.jwt.filters.JwtAuthorizationFilter;
-import ikpi63holding.postclient.jwt.userprincipial.UserPrincipalDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserPrincipalDetailsService userPrincipalDetailsService;
+    private UserDetailsService userDetailsService;
     @Autowired
     private JwtProperties jwtProperties;
 
@@ -42,13 +42,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProperties))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtProperties,
-                        userPrincipalDetailsService))
+                        userDetailsService))
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/registration").permitAll()
-                .antMatchers("/api/**/*").hasRole("USER")
-                .antMatchers("/**/*{.html|.css|.js|.vue}").permitAll()
-                .antMatchers("/").permitAll()
+                .antMatchers("/admin/api/**/*").hasRole("ADMIN")
+                .antMatchers("/api", "/api/*").denyAll()
+                .antMatchers("/api/users/{username}", "/api/users/{username}/**/*")
+                .access("hasRole('USER') and " //FUCK THIS LINE
+                        + "principal.getUsername().equals(#username)")
+                .antMatchers(HttpMethod.POST, "/login", "/registration").permitAll()
+                .antMatchers("/", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.vue").permitAll()
                 .anyRequest().authenticated();
 
     }
@@ -57,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(this.userPrincipalDetailsService);
+        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService);
 
         return daoAuthenticationProvider;
     }
