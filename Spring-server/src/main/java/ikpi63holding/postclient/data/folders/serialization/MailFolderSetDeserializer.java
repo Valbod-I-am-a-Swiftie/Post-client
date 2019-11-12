@@ -26,8 +26,7 @@ public class MailFolderSetDeserializer extends StdDeserializer<MailFolderSet> {
 
         JsonNode root = jp.getCodec().readTree(jp);
         List<MailFolderJsonObject> jsonObjectList = new ArrayList<>();
-        for (JsonNode node: root)
-        {
+        for (JsonNode node : root) {
             MailFolderJsonObject jsonObject = new MailFolderJsonObject();
             jsonObject.setName(node.get("name").asText());
             jsonObject.setType(node.get("type").asText());
@@ -35,4 +34,5 @@ public class MailFolderSetDeserializer extends StdDeserializer<MailFolderSet> {
         }
         return new MailFolderSet(jsonObjectList);
     }
+
 }

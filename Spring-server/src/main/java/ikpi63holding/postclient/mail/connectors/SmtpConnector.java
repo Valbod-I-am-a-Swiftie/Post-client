@@ -39,13 +39,13 @@ public class SmtpConnector {
 
     public Session SmtpSession;
 
-    public SmtpConnector(String userName, String password, String host) throws Exception {
-        this.SmtpSession = this.getSmtpSession(userName, password, host);
+    public SmtpConnector(String username, String password, String host) throws Exception {
+        this.SmtpSession = this.getSmtpSession(username, password, host);
     }
 
-    private Session getSmtpSession(String userName, String password, String host) throws Exception {
+    private Session getSmtpSession(String username, String password, String host) throws Exception {
 
-        if (userName == null) {
+        if (username == null) {
             throw new Exception("No such user");
         }
         Properties properties = new Properties();
@@ -58,8 +58,9 @@ public class SmtpConnector {
 
         Session SmtpSession = Session.getInstance(properties,
                 new javax.mail.Authenticator() {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(userName, password);
+                        return new PasswordAuthentication(username, password);
                     }
                 });
 

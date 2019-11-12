@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import ikpi63holding.postclient.controllers.abstractapi.AbstractMailboxController;
 import ikpi63holding.postclient.data.View;
 import ikpi63holding.postclient.data.maibox.Mailbox;
-import ikpi63holding.postclient.data.user.User;
 import ikpi63holding.postclient.data.user.UserRepository;
-import ikpi63holding.postclient.mail.MailService;
 import ikpi63holding.postclient.mail.MailServiceFactory;
 import ikpi63holding.postclient.mail.PostMessage;
 import java.util.List;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("admin/api/users")
@@ -36,7 +33,7 @@ public class AdminMailboxController extends AbstractMailboxController {
     @ResponseStatus(HttpStatus.CREATED)
     @JsonView(View.NewMailboxAdmin.class)
     public Mailbox addMailbox(@RequestBody Mailbox newMailbox, @PathVariable String username) {
-       return super.addMailbox(newMailbox, username);
+        return super.addMailbox(newMailbox, username);
     }
 
     @Override

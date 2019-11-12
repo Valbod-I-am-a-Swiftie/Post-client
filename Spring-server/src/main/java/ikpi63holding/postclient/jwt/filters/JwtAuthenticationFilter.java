@@ -7,7 +7,6 @@ import ikpi63holding.postclient.data.user.User;
 import ikpi63holding.postclient.jwt.JwtProperties;
 import ikpi63holding.postclient.jwt.userprincipial.UserPrincipal;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;

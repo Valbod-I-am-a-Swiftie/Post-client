@@ -16,18 +16,16 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Application {
+    @Value("${server.port.http}")
+    int httpPort;
+    @Value("${server.port}")
+    int httpsPort;
+    @Value("${server.address}")
+    String address;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
-    @Value("${server.port.http}")
-    int httpPort;
-
-    @Value("${server.port}")
-    int httpsPort;
-
-    @Value("${server.address}")
-    String address;
 
     @Bean
     public ServletWebServerFactory servletContainer() {

@@ -58,7 +58,7 @@ public class User {
     private List<Mailbox> mailboxes;
 
     public void addMailbox(Mailbox mailbox) {
-        if (getMailbox(mailbox.getMailLogin()).isPresent()){
+        if (getMailbox(mailbox.getMailLogin()).isPresent()) {
             throw new RuntimeException(mailbox.getMailLogin() + " is already present");
         }
         int maxId = mailboxes.stream().map(Mailbox::getId)
@@ -77,7 +77,7 @@ public class User {
                 .findAny();
     }
 
-    public boolean mailboxExists(String mailLogin){
+    public boolean mailboxExists(String mailLogin) {
         return getMailbox(mailLogin).isPresent();
     }
 

@@ -68,6 +68,7 @@ public class ImapConnector {
 
         Session sessionImap =
                 Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(login, password);
                     }

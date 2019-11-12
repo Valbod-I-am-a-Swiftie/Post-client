@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class NoSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public NoSecurityConfiguration() {
+        System.out.println("\nSecurity checks disabled\n");
     }
 
     @Override

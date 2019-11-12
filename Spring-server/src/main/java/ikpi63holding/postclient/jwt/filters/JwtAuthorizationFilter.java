@@ -57,7 +57,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .build()
                     .verify(token)
                     .getSubject();
-        } catch (JWTVerificationException e){
+        } catch (JWTVerificationException e) {
             return null;
         }
         if (username != null) {
@@ -67,7 +67,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, null,
                                 userDetails.getAuthorities());
                 return auth;
-            } catch (UsernameNotFoundException e){
+            } catch (UsernameNotFoundException e) {
                 return null;
             }
         }

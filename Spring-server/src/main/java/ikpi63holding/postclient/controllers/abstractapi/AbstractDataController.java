@@ -33,7 +33,7 @@ public abstract class AbstractDataController {
         return userRepository.existsByUsername(username);
     }
 
-    protected void deleteUser(User user){
+    protected void deleteUser(User user) {
         userRepository.delete(user);
     }
 

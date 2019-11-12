@@ -3,11 +3,9 @@ package ikpi63holding.postclient.jwt;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Profile;
-
 
 @ConfigurationProperties("administration")
 @Profile("!nojwt")
@@ -20,7 +18,7 @@ public class AdminProperties {
 
     @ToString
     @RequiredArgsConstructor
-    public static class Admin{
+    public static class Admin {
 
         @Getter
         private final String name;
@@ -32,4 +30,5 @@ public class AdminProperties {
         private final String permissions;
 
     }
+
 }
