@@ -50,7 +50,7 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-            System.out.println("Server loaded");
+            System.out.println("\nServer loaded\n");
         };
     }
 
