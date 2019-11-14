@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,14 +65,12 @@ public class ImapConnector {
         properties.put("mail.imap.ssl.enable", "true");
         properties.put("mail.imap.port", IMAPS_PORT);
 
-        Session sessionImap =
-                Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(login, password);
-                    }
-                });
-        return sessionImap;
+        return Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(login, password);
+            }
+        });
     }
 
     public List<String> getFolders() throws MessagingException {
@@ -160,12 +157,10 @@ public class ImapConnector {
 
     private static class DefaultTrustManager implements X509TrustManager {
         @Override
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1)
-                throws CertificateException {}
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1) {}
 
         @Override
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1)
-                throws CertificateException {}
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1) {}
 
         @Override
         public X509Certificate[] getAcceptedIssuers() {

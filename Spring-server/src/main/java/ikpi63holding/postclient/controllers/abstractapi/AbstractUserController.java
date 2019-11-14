@@ -98,6 +98,4 @@ public abstract class AbstractUserController extends AbstractDataController {
 
     }
 
-    ;
-
 }

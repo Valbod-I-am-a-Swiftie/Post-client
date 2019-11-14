@@ -14,8 +14,7 @@ public class MediaTypeUtils {
         // image/gif, ...
         String mineType = servletContext.getMimeType(fileName);
         try {
-            MediaType mediaType = MediaType.parseMediaType(mineType);
-            return mediaType;
+            return MediaType.parseMediaType(mineType);
         } catch (Exception e) {
             return MediaType.APPLICATION_OCTET_STREAM;
         }

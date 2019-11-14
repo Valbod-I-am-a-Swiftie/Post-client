@@ -4,7 +4,6 @@ import ikpi63holding.postclient.mail.PostMessage;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 import javax.mail.Message;
@@ -56,15 +55,13 @@ public class SmtpConnector {
         properties.put("mail.smtp.socketFactory.port", SMTPS_PORT);
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
-        Session SmtpSession = Session.getInstance(properties,
+        return Session.getInstance(properties,
                 new javax.mail.Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username, password);
                     }
                 });
-
-        return SmtpSession;
     }
 
     public void sendEmail(PostMessage message) throws MessagingException {
@@ -76,12 +73,10 @@ public class SmtpConnector {
 
     private static class DefaultTrustManager implements X509TrustManager {
         @Override
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws
-                CertificateException {}
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1) {}
 
         @Override
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1)
-                throws CertificateException {}
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1) {}
 
         @Override
         public X509Certificate[] getAcceptedIssuers() {

@@ -25,6 +25,7 @@ public class FileController extends AbstractMailServiceController {
     @Autowired
     private ServletContext servletContext;
 
+    @Autowired
     protected FileController(UserRepository userRepository,
             MailServiceFactory mailServiceFactory) {
         super(userRepository, mailServiceFactory);
@@ -51,7 +52,7 @@ public class FileController extends AbstractMailServiceController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename)
                 // Content-Type
                 .contentType(mediaType)
-                // TODO Contet-Length
+                // TODO Content-Length
                 //.contentLength(file.length()) //
                 .body(resource);
     }

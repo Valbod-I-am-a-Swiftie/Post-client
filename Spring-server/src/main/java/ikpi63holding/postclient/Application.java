@@ -34,22 +34,18 @@ public class Application {
             builder.addHttpListener(httpPort, address);
             builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
         });
-        undertow.addDeploymentInfoCustomizers(deploymentInfo -> {
-            deploymentInfo.addSecurityConstraint(new SecurityConstraint()
-                    .addWebResourceCollection(new WebResourceCollection()
-                            .addUrlPattern("/*"))
-                    .setTransportGuaranteeType(TransportGuaranteeType.CONFIDENTIAL)
-                    .setEmptyRoleSemantic(SecurityInfo.EmptyRoleSemantic.PERMIT))
-                    .setConfidentialPortManager(exchange -> httpsPort);
-        });
+        undertow.addDeploymentInfoCustomizers(deploymentInfo -> deploymentInfo.addSecurityConstraint(new SecurityConstraint()
+                .addWebResourceCollection(new WebResourceCollection()
+                        .addUrlPattern("/*"))
+                .setTransportGuaranteeType(TransportGuaranteeType.CONFIDENTIAL)
+                .setEmptyRoleSemantic(SecurityInfo.EmptyRoleSemantic.PERMIT))
+                .setConfidentialPortManager(exchange -> httpsPort));
         return undertow;
     }
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-            System.out.println("\nServer loaded\n");
-        };
+        return args -> System.out.println("\nServer loaded\n");
     }
 
 }

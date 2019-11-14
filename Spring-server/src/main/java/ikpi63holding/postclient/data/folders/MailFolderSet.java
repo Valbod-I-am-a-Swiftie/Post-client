@@ -22,8 +22,8 @@ public class MailFolderSet {
     private static final String LIST_DELIM = ", ";
     private static final String TYPE_DELIM = ":";
 
-    private Set<String> nameSet = new TreeSet<>();
-    private Map<FolderType, String> typeMap = new EnumMap<>(FolderType.class);
+    private final Set<String> nameSet = new TreeSet<>();
+    private final Map<FolderType, String> typeMap = new EnumMap<>(FolderType.class);
 
     public MailFolderSet(String parse) {
         Arrays.stream(parse.split(LIST_DELIM)).forEach(s -> {

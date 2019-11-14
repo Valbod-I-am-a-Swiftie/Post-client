@@ -51,7 +51,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(jwtProperties.headerString)
                 .replace(jwtProperties.tokenPrefix, "");
 
-        String username = null;
+        String username;
         try {
             username = JWT.require(Algorithm.HMAC512(jwtProperties.secret.getBytes()))
                     .build()
@@ -63,10 +63,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         if (username != null) {
             try {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(userDetails, null,
-                                userDetails.getAuthorities());
-                return auth;
+                return new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
             } catch (UsernameNotFoundException e) {
                 return null;
             }
