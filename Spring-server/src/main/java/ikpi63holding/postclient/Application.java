@@ -16,18 +16,16 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Application {
+    @Value("${server.port.http}")
+    int httpPort;
+    @Value("${server.port}")
+    int httpsPort;
+    @Value("${server.address}")
+    String address;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
-    @Value("${server.port.http}")
-    int httpPort;
-
-    @Value("${server.port}")
-    int httpsPort;
-
-    @Value("${server.address}")
-    String address;
 
     @Bean
     public ServletWebServerFactory servletContainer() {
@@ -36,22 +34,18 @@ public class Application {
             builder.addHttpListener(httpPort, address);
             builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
         });
-        undertow.addDeploymentInfoCustomizers(deploymentInfo -> {
-            deploymentInfo.addSecurityConstraint(new SecurityConstraint()
-                    .addWebResourceCollection(new WebResourceCollection()
-                            .addUrlPattern("/*"))
-                    .setTransportGuaranteeType(TransportGuaranteeType.CONFIDENTIAL)
-                    .setEmptyRoleSemantic(SecurityInfo.EmptyRoleSemantic.PERMIT))
-                    .setConfidentialPortManager(exchange -> httpsPort);
-        });
+        undertow.addDeploymentInfoCustomizers(deploymentInfo -> deploymentInfo.addSecurityConstraint(new SecurityConstraint()
+                .addWebResourceCollection(new WebResourceCollection()
+                        .addUrlPattern("/*"))
+                .setTransportGuaranteeType(TransportGuaranteeType.CONFIDENTIAL)
+                .setEmptyRoleSemantic(SecurityInfo.EmptyRoleSemantic.PERMIT))
+                .setConfidentialPortManager(exchange -> httpsPort));
         return undertow;
     }
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-            System.out.println("Server loaded");
-        };
+        return args -> System.out.println("\nServer loaded\n");
     }
 
 }

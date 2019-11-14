@@ -1,7 +1,6 @@
 package ikpi63holding.postclient.data.folders.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -22,12 +21,11 @@ public class MailFolderSetDeserializer extends StdDeserializer<MailFolderSet> {
 
     @Override
     public MailFolderSet deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
 
         JsonNode root = jp.getCodec().readTree(jp);
         List<MailFolderJsonObject> jsonObjectList = new ArrayList<>();
-        for (JsonNode node: root)
-        {
+        for (JsonNode node : root) {
             MailFolderJsonObject jsonObject = new MailFolderJsonObject();
             jsonObject.setName(node.get("name").asText());
             jsonObject.setType(node.get("type").asText());
@@ -35,4 +33,5 @@ public class MailFolderSetDeserializer extends StdDeserializer<MailFolderSet> {
         }
         return new MailFolderSet(jsonObjectList);
     }
+
 }

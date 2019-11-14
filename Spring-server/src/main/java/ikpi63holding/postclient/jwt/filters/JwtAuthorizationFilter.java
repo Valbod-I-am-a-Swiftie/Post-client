@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import ikpi63holding.postclient.jwt.JwtProperties;
-import ikpi63holding.postclient.jwt.userprincipial.UserPrincipalDetailsService;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,19 +14,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JwtProperties jwtProperties;
-    private final UserPrincipalDetailsService principalDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
-            JwtProperties jwtProperties, UserPrincipalDetailsService detailsService) {
+            JwtProperties jwtProperties, UserDetailsService detailsService) {
         super(authenticationManager);
         this.jwtProperties = jwtProperties;
-        this.principalDetailsService = detailsService;
+        this.userDetailsService = detailsService;
     }
 
     @Override
@@ -51,28 +51,23 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(jwtProperties.headerString)
                 .replace(jwtProperties.tokenPrefix, "");
 
-        if (token != null) {
-            String userName = null;
+        String username;
+        try {
+            username = JWT.require(Algorithm.HMAC512(jwtProperties.secret.getBytes()))
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException e) {
+            return null;
+        }
+        if (username != null) {
             try {
-                userName = JWT.require(Algorithm.HMAC512(jwtProperties.secret.getBytes()))
-                        .build()
-                        .verify(token)
-                        .getSubject();
-            } catch (JWTVerificationException e){
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                return new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
+            } catch (UsernameNotFoundException e) {
                 return null;
             }
-            if (userName != null) {
-                try {
-                    UserDetails userDetails = principalDetailsService.loadUserByUsername(userName);
-                    UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(userName, null,
-                                    userDetails.getAuthorities());
-                    return auth;
-                } catch (UsernameNotFoundException e){
-                    return null;
-                }
-            }
-            return null;
         }
         return null;
     }
