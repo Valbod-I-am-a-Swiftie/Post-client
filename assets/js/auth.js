@@ -1,46 +1,142 @@
-var username = null;
-var password = null;
-var shoPass = 0;
-var remMe = 0;
+function signIn() {
+    let check = document.getElementById('check');
+    let username = document.getElementById('user');
+    let password = document.getElementById('pass');
 
-function saveUserData() {
-    username = document.getElementById('user').value;
-    password = document.getElementById('pass').value;
+    let divUsername = document.getElementById('div-us');
+    let divPassword = document.getElementById('div-pass');
 
-    console.log('username -> ' + username);
-    console.log('password -> ' + password);
-}
+    if (username.value === '' || password.value === '') {
+        
+        if (username.value === '' && password.value !== '') {
+            divUsername.style.borderColor = 'rgb(251, 127, 119)';
+            divPassword.style.borderColor = '#19c125';
+        }
 
-function login() {
-}
+        if (password.value === '' && username.value !== '') {
+            divPassword.style.borderColor = 'rgb(251, 127, 119)';
+            divUsername.style.borderColor = '#19c125';
+        }
 
-function goToPage() {
-  var url = 'https://localhost:8443/API/all';
-  console.log(url);
-  document.location.href = url;
-}
+        if (username.value === '' && password.value === '') {
+            divUsername.style.borderColor = 'rgb(251, 127, 119)';
+            divPassword.style.borderColor = 'rgb(251, 127, 119)';
+        }
 
-function showPass1() {
-    if (shoPass === 0) {
-        document.getElementById('pass1').type = 'text';
-        document.getElementById('eye-icon').className = 'fas fa-eye';
-        shoPass = 1;
     } else {
-        document.getElementById('pass1').type = 'password';
-        document.getElementById('eye-icon').className = 'fas fa-eye-slash';
-        shoPass = 0;
+        divUsername.style.borderColor = '#19c125';
+        divPassword.style.borderColor = '#19c125';
+
+        if (check.checked === true) {      
+            localStorage.setItem('username', username.value);
+            localStorage.setItem('password', password.value);
+        } 
+
+        //sign in here
+
+    }  
+}
+
+function signUp() {
+    let check = document.getElementById('check');
+    let username = document.getElementById('user');
+    let password1 = document.getElementById('pass1');
+    let password2 = document.getElementById('pass2');
+
+    let divUsername = document.getElementById('div-us');
+    let divPassword1 = document.getElementById('div-pass1');
+    let divPassword2 = document.getElementById('div-pass2');
+
+ 
+
+    if (username.value === '' || password1.value === '' || password2.value === '') {
+
+        if (username.value === '') {
+            divUsername.style.borderColor = 'rgb(251, 127, 119)';
+        } else {
+            divUsername.style.borderColor = '#19c125';
+        }
+
+        if (password1.value === '') {
+            divPassword1.style.borderColor = 'rgb(251, 127, 119)';
+        } else {
+            divPassword1.style.borderColor = '#19c125';
+        }
+
+        if (password2.value === '') {
+            divPassword2.style.borderColor = 'rgb(251, 127, 119)';
+        } else {
+            divPassword2.style.borderColor = '#19c125';
+        }
+
+    } else {
+
+        // divUsername.style.borderColor = '#19c125';
+        // divPassword1.style.borderColor = '#19c125';
+        // divPassword2.style.borderColor = '#19c125';
+
+        if (password1.value === password2.value) {
+            console.log('password confirmed');
+
+            divPassword1.style.borderColor = '#19c125';
+            divPassword2.style.borderColor = '#19c125';
+
+            if (check.checked === true) {      
+
+                localStorage.setItem('username', username.value);
+                localStorage.setItem('password', password1.value);
+            } 
+        } else {
+            alert('Password is not correct!')
+            divUsername.style.borderColor = '#19c125';
+            divPassword1.style.borderColor = 'rgb(251, 127, 119)';
+            divPassword2.style.borderColor = 'rgb(251, 127, 119)';
+        }
     }
 }
 
-function showPass2() {
-    if (shoPass === 0) {
-        document.getElementById('pass2').type = 'text';
-        document.getElementById('eye-icon').className = 'fas fa-eye';
-        shoPass = 1;
+function showPass() {   
+    let pass = document.getElementById('pass');
+    let eye = document.getElementById('eye-icon');  
+    
+    if (pass.type === 'password') {
+        pass.type = 'text';     
+        eye.className = 'fas fa-eye';
+        eye.style.color = '#19c125';
     } else {
-        document.getElementById('pass2').type = 'password';
-        document.getElementById('eye-icon').className = 'fas fa-eye-slash';
-        shoPass = 0;
+        pass.type = 'password';       
+        eye.className = 'fas fa-eye-slash';
+        eye.style.color = '#999';
+    }
+}
+
+function showPass1() {   
+    let pass = document.getElementById('pass1');
+    let eye = document.getElementById('eye-icon1');    
+    
+    if (pass.type === 'password') {
+        pass.type = 'text';     
+        eye.className = 'fas fa-eye';
+        eye.style.color = '#19c125';
+    } else {
+        pass.type = 'password';       
+        eye.className = 'fas fa-eye-slash';
+        eye.style.color = '#999';
+    }
+}
+
+function showPass2() {   
+    let pass = document.getElementById('pass2');
+    let eye = document.getElementById('eye-icon2'); 
+    
+    if (pass.type === 'password') {
+        pass.type = 'text';     
+        eye.className = 'fas fa-eye';
+        eye.style.color = '#19c125';
+    } else {
+        pass.type = 'password';       
+        eye.className = 'fas fa-eye-slash';
+        eye.style.color = '#999';
     }
 }
 
@@ -60,33 +156,58 @@ function rememberMe() {
 
 function toSignIn() {
     let labelIn = document.getElementById('sign-in');
-    let labelUp = document.getElementById('sign-up');
-    let btn = document.getElementById('btn');
-    let confirm = document.getElementById('pass2');
-    let confirmField = document.getElementById('conf');
-    let footer = document.getElementById('hide');
- 
-    //19c125
     labelIn.className = 'auth on';
+
+    let labelUp = document.getElementById('sign-up');
     labelUp.className = 'auth off';
-    btn.textContent = 'sign in';
-    confirm.style.display = 'none';
-    confirmField.style.display = 'none';
-    footer.style.display = 'flex';
+    //show elements
+    let divPass = document.getElementById('div-pass');
+    divPass.className = 'block input-f m-b-12';
+    
+    let divPass1 = document.getElementById('div-pass1');
+    divPass1.className = 'hide input-f m-b-12';
+
+    let spanConfirm = document.getElementById('span-pass2');
+    spanConfirm.className = 'hide ttl';
+
+    let divConfirm = document.getElementById('div-pass2');
+    divConfirm.className = 'hide input-f m-b-12';
+
+    let footer = document.getElementById('footer');
+    footer.className = 'flex full-class';
+
+    let divBtnIn = document.getElementById('div-btn-in');
+    divBtnIn.className = 'flex container-form-btn';
+
+    let divBtnUp = document.getElementById('div-btn-up');
+    divBtnUp.className = 'hide container-form-btn';
 }
 
 function toSignUp() {
     let labelIn = document.getElementById('sign-in');
-    let labelUp = document.getElementById('sign-up');
-    let btn = document.getElementById('btn');
-    let confirm = document.getElementById('pass2');
-    let confirmField = document.getElementById('conf');
-    let footer = document.getElementById('hide');
-
     labelIn.className = 'auth off';
+
+    let labelUp = document.getElementById('sign-up');
     labelUp.className = 'auth on';
-    btn.textContent = 'sign up';
-    confirm.style.display = 'block';
-    confirmField.style.display = 'block';
-    footer.style.display = 'none';
+    //show elements
+    let divPass = document.getElementById('div-pass');
+    divPass.className = 'hide input-f m-b-12';
+    
+    let divPass1 = document.getElementById('div-pass1');
+    divPass1.className = 'block input-f m-b-12';
+
+    let spanConfirm = document.getElementById('span-pass2');
+    spanConfirm.className = 'block ttl';
+
+    let divConfirm = document.getElementById('div-pass2');
+    divConfirm.className = 'block input-f m-b-12';
+
+    let footer = document.getElementById('footer');
+    footer.className = 'hide full-class';
+
+    let divBtnIn = document.getElementById('div-btn-in');
+    divBtnIn.className = 'hide container-form-btn';
+
+    let divBtnUp = document.getElementById('div-btn-up');
+    divBtnUp.className = 'flex container-form-btn';
 }

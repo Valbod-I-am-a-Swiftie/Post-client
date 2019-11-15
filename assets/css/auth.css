@@ -33,6 +33,10 @@ input {
   display: block;
 }
 
+.flex {
+  display: flex;
+}
+
 .p-r-85 {
   padding-right: 85px;
 }
@@ -83,15 +87,21 @@ input {
   background-color: white;
   border: #fff solid 1px;
   border-radius: 30px;
+
+  transition: border 0.2s linear;
 }
 
 .on {
   color: #19c125;
   border: #19c125 solid 1px;
+
+  transition: border 0.2s linear;
 }
 
 .off {
   color: #555;
+
+  transition: border 0.2s linear;
 }
 
 .off:hover {
@@ -110,6 +120,7 @@ input {
 
 .input-f {
   position: relative;
+  transition: border 0.3s linear;
 
   width: 100%;
   background-color: #ffffff;
@@ -128,15 +139,20 @@ input {
 }
 
 .in-us {
+  border-color: #999;
+
   font-weight: 500;
   color: #555;
   line-height: 1.2;
   font-size: 18px;
+
   display: block;
+
   width: 100%;
   background: 0 0;
   height: 55px;
   padding: 0 25px;
+
   overflow: visible;
 }
 
@@ -183,7 +199,7 @@ input {
 }
 
 .full-class {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -229,7 +245,7 @@ input {
 
 .container-form-btn {
   width: 100%;
-  display: flex;
+  /* display: flex; */
   flex-wrap: wrap;
   justify-content: center;
 

@@ -14,9 +14,11 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> --> 
 
   </head>
+
   <body>
     <div class="auth-container p-l-85 p-r-85 p-t-55 p-b-55">
-      <form class="login-form" method="post" action="index.html">
+      <!-- <form class="login-form" method="post" action="index.html"> -->
+      <div class="login-form">
         <div class="auth-title">
           <span id="sign-in" class="auth on" onclick="toSignIn()">sign in</span>
           <span id="sign-up" class="auth off" onclick="toSignUp()">sign up</span> 
@@ -24,31 +26,38 @@
         <span class="ttl">
           username
         </span>
-        <div class="input-f">
+        <div id="div-us" class="input-f">
           <input id="user" class="in-us" type="text" name="username" value="">
         </div>
-        <!-- password -->
-        <span id="pass1" class="block ttl">
+        <!-- only password -->
+        <span id="span-pass" class="block ttl">
           password
         </span>
-        <div class="block input-f m-b-12">
+        <div id="div-pass" class="block input-f m-b-12">
+          <span class="btn-show-pass" onclick="showPass()">
+              <i id="eye-icon" class="fas fa-eye-slash"></i>
+          </span>
+          <input id="pass" class="in-us" type="password" name="password1" value="">
+        </div>
+        <!-- password -->
+        <div id="div-pass1" class="hide input-f m-b-12">
           <span class="btn-show-pass" onclick="showPass1()">
-              <i id="eye-icon" class="fas fa-eye-slash fa-eye"></i>
+              <i id="eye-icon1" class="fas fa-eye-slash"></i>
           </span>
           <input id="pass1" class="in-us" type="password" name="password1" value="">
         </div>
         <!-- confirm password -->
-        <span id="pass2" class="hide ttl">
+        <span id="span-pass2" class="hide ttl">
           confirm password
         </span>
-        <div id="conf" class="hide input-f m-b-12">
+        <div id="div-pass2" class="hide input-f m-b-12">
           <span class="btn-show-pass" onclick="showPass2()">
-              <i id="eye-icon" class="fas fa-eye-slash fa-eye"></i>
+              <i id="eye-icon2" class="fas fa-eye-slash"></i>
           </span>
           <input id="pass2" class="in-us" type="password" name="password2" value="">
         </div>
         <!-- footer -->
-        <div id="hide" class="full-class">
+        <div id="footer" class="flex full-class">
           <div class="checkbox-form">
             <input id="check" class="input-checkbox" type="checkbox" name="remember-me" value="">
             <i id="icon" class="far fa-square"></i>
@@ -63,12 +72,18 @@
           </div>
         </div>
         <!-- button -->
-        <div class="container-form-btn">
-          <button id="btn" class="form-btn" onclick="login()">
+        <div id="div-btn-in" class="flex container-form-btn">
+          <button id="btn-in" class="form-btn" onclick="signIn()">
             sign in
           </button>
         </div>
-      </form>
+
+        <div id="div-btn-up" class="hide container-form-btn">
+          <button id="btn-up" class="form-btn" onclick="signUp()">
+            sign up
+          </button>
+        </div>
+      </div>
     </div>
 
     <script type="text/javascript" src="js/auth.js"></script>
