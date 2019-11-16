@@ -45,9 +45,7 @@ function signUp() {
 
     let divUsername = document.getElementById('div-us');
     let divPassword1 = document.getElementById('div-pass1');
-    let divPassword2 = document.getElementById('div-pass2');
-
- 
+    let divPassword2 = document.getElementById('div-pass2'); 
 
     if (username.value === '' || password1.value === '' || password2.value === '') {
 
@@ -71,10 +69,6 @@ function signUp() {
 
     } else {
 
-        // divUsername.style.borderColor = '#19c125';
-        // divPassword1.style.borderColor = '#19c125';
-        // divPassword2.style.borderColor = '#19c125';
-
         if (password1.value === password2.value) {
             console.log('password confirmed');
 
@@ -86,6 +80,9 @@ function signUp() {
                 localStorage.setItem('username', username.value);
                 localStorage.setItem('password', password1.value);
             } 
+
+            //sign up here
+
         } else {
             alert('Password is not correct!')
             divUsername.style.borderColor = '#19c125';
