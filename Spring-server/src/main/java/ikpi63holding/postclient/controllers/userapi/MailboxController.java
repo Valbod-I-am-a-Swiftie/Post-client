@@ -1,6 +1,7 @@
 package ikpi63holding.postclient.controllers.userapi;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import ikpi63holding.postclient.UriDefines;
 import ikpi63holding.postclient.controllers.abstractapi.AbstractMailboxController;
 import ikpi63holding.postclient.data.View;
 import ikpi63holding.postclient.data.maibox.Mailbox;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users/")
+@RequestMapping(UriDefines.USER_API)
 public class MailboxController extends AbstractMailboxController {
 
     @Autowired
@@ -29,33 +30,36 @@ public class MailboxController extends AbstractMailboxController {
     }
 
     @Override
-    @PostMapping("/{username}/mailboxes")
+    @PostMapping(UriDefines.MAILBOX_COLLECTION)
     @ResponseStatus(HttpStatus.CREATED)
     @JsonView(View.NewMailbox.class)
-    public Mailbox addMailbox(@RequestBody Mailbox newMailbox, @PathVariable String username) {
+    public Mailbox addMailbox(@RequestBody Mailbox newMailbox,
+            @PathVariable(UriDefines.USER_VARIABLE) String username) {
         return super.addMailbox(newMailbox, username);
     }
 
     @Override
-    @GetMapping("/{username}/mailboxes/{mailboxId}")
+    @GetMapping(UriDefines.MAILBOX_ENTITY)
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.Mailbox.class)
-    public Mailbox findMailbox(@PathVariable String username, @PathVariable int mailboxId) {
+    public Mailbox findMailbox(@PathVariable(UriDefines.USER_VARIABLE) String username,
+            @PathVariable(UriDefines.MAILBOX_VARIABLE) int mailboxId) {
         return super.findMailbox(username, mailboxId);
     }
 
     @Override
-    @GetMapping("/{username}/mailboxes")
+    @GetMapping(UriDefines.MAILBOX_COLLECTION)
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.Compact.class)
-    public List<Mailbox> allMailboxes(@PathVariable String username) {
+    public List<Mailbox> allMailboxes(@PathVariable(UriDefines.USER_VARIABLE) String username) {
         return super.allMailboxes(username);
     }
 
     @Override
-    @PostMapping("/{username}/mailboxes/{mailboxId}")
+    @PostMapping(UriDefines.MAILBOX_ENTITY)
     @ResponseStatus(HttpStatus.OK)
-    protected void sendMail(@PathVariable String username, @PathVariable int mailboxId,
+    protected void sendMail(@PathVariable(UriDefines.USER_VARIABLE) String username,
+            @PathVariable(UriDefines.MAILBOX_VARIABLE) int mailboxId,
             @RequestBody PostMessage message) throws Exception {
         super.sendMail(username, mailboxId, message);
     }

@@ -1,5 +1,6 @@
 package ikpi63holding.postclient.jwt;
 
+import ikpi63holding.postclient.UriDefines;
 import ikpi63holding.postclient.jwt.filters.JwtAuthenticationFilter;
 import ikpi63holding.postclient.jwt.filters.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +45,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtProperties,
                         userDetailsService))
                 .authorizeRequests()
-                .antMatchers("/admin/api/**/*").hasRole("ADMIN")
-                .antMatchers("/api", "/api/*").denyAll()
-                .antMatchers("/api/users/{username}", "/api/users/{username}/**/*")
+                .antMatchers(UriDefines.ADMIN_API + UriDefines.ANY).hasRole("ADMIN")
+                .antMatchers(UriDefines.USER_API, UriDefines.USER_API + UriDefines.ANY_LOCAL)
+                .denyAll()
+                .antMatchers(UriDefines.USER_API + UriDefines.USER_ENTITY,
+                        UriDefines.USER_API + UriDefines.USER_ENTITY + UriDefines.ANY)
                 .access("hasRole('USER') and " //FUCK THIS LINE
-                        + "principal.getUsername().equals(#username)")
-                .antMatchers(HttpMethod.POST, "/login", "/registration").permitAll()
-                .antMatchers("/", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.vue").permitAll()
+                        + "principal.getUsername().equals(#" + UriDefines.USER_VARIABLE + ")")
+                .antMatchers(HttpMethod.POST, UriDefines.LOGIN, UriDefines.REGISTRATION).permitAll()
+                .antMatchers(UriDefines.ROOT, UriDefines.ANY + ".html", UriDefines.ANY + ".css",
+                        UriDefines.ANY + ".js", UriDefines.ANY + ".vue").permitAll()
                 .anyRequest().authenticated();
 
     }

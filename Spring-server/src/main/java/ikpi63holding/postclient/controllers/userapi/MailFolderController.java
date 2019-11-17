@@ -1,6 +1,7 @@
 package ikpi63holding.postclient.controllers.userapi;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import ikpi63holding.postclient.UriDefines;
 import ikpi63holding.postclient.controllers.abstractapi.AbstractMailFolderController;
 import ikpi63holding.postclient.data.View;
 import ikpi63holding.postclient.data.folders.MailFolderSet;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(UriDefines.USER_API)
 public class MailFolderController extends AbstractMailFolderController {
 
     @Autowired
@@ -27,19 +28,21 @@ public class MailFolderController extends AbstractMailFolderController {
     }
 
     @Override
-    @GetMapping("/{username}/mailboxes/{mailboxId}/folders")
+    @GetMapping(UriDefines.FOLDER_COLLECTION)
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.Compact.class)
-    public MailFolderSet getFolders(@PathVariable String username, @PathVariable int mailboxId) {
+    public MailFolderSet getFolders(@PathVariable(UriDefines.USER_VARIABLE) String username,
+            @PathVariable(UriDefines.MAILBOX_VARIABLE) int mailboxId) {
         return super.getFolders(username, mailboxId);
     }
 
     @Override
-    @PutMapping("/{username}/mailboxes/{mailboxId}/folders")
+    @PutMapping(UriDefines.FOLDER_COLLECTION)
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.NewFolder.class)
     public MailFolderSet addFolders(@RequestBody MailFolderSet newMailFolderSet,
-            @PathVariable String username, @PathVariable int mailboxId)
+            @PathVariable(UriDefines.USER_VARIABLE) String username,
+            @PathVariable(UriDefines.MAILBOX_VARIABLE) int mailboxId)
             throws Exception {
         return super.addFolders(newMailFolderSet, username, mailboxId);
     }
