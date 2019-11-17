@@ -116,8 +116,7 @@ function getLettersList() {
     for (let i = 0; i < letterInJSON.length; i++) { 
         let copy = letterInJSON[i];
         letters.message.push(Object.assign({}, copy));        
-    }
-    
+    }    
     setData();
 }
 //
@@ -227,3 +226,4 @@ function backToListOfLetters() {
     letterContainer.style.display = 'none';
     listOfLetters.style.display = 'flex';
 }
+

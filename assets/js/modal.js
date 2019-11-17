@@ -15,18 +15,21 @@ function saveChanges() {
     let text = document.getElementById('text').value;
 
     if (recipient !== '' && text !== '') {
-        console.log('ok rec & text');
         
         if (subject == '') {
-            subject = 'without subject';
-            console.log('sub is empty');
-            
-
+            subject = 'without subject';          
         }
         closeNewLetterModalWindow();
-        console.log('closed');
         
     } else {
         alert('attention! some fields are empty!')
     }
+
+    let rec = recipient;
+    let sub = subject;
+    let tex = text;
+
+    console.log('saved');
+    console.log(rec + '\n' + sub + '\n' + tex);
+    
 }
