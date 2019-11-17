@@ -1,5 +1,6 @@
 package ikpi63holding.postclient.controllers.userapi;
 
+import ikpi63holding.postclient.UriDefines;
 import ikpi63holding.postclient.controllers.abstractapi.AbstractMailServiceController;
 import ikpi63holding.postclient.data.maibox.Mailbox;
 import ikpi63holding.postclient.data.user.UserRepository;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users/")
+@RequestMapping(UriDefines.USER_API)
 public class MailMessagingController extends AbstractMailServiceController {
 
     @Autowired
@@ -25,18 +26,20 @@ public class MailMessagingController extends AbstractMailServiceController {
         super(userRepository, mailServiceFactory);
     }
 
-    @GetMapping("/{username}/mailboxes/{mailboxId}/folders/{folderName}/messages")
+    @GetMapping(UriDefines.MESSAGE_COLLECTION)
     @ResponseStatus(HttpStatus.OK)
-    public List<PostMessage> getMailList(@PathVariable String username, @PathVariable int mailboxId,
-            @PathVariable String folderName) throws Exception {
+    public List<PostMessage> getMailList(@PathVariable(UriDefines.USER_VARIABLE) String username,
+            @PathVariable(UriDefines.MAILBOX_VARIABLE) int mailboxId,
+            @PathVariable(UriDefines.FOLDER_VARIABLE) String folderName) throws Exception {
         Mailbox mailbox = getMailbox(username, mailboxId);
         var mailService = getMailService(mailbox);
         return mailService.getMailList(folderName);
     }
 
-    @DeleteMapping("/{username}/mailboxes/{mailboxId}/folders/{folderName}/messages/{messageId}")
-    public void deleteMail(@PathVariable String username, @PathVariable int mailboxId,
-            @PathVariable String folderName, @PathVariable
+    @DeleteMapping(UriDefines.MESSAGE_ENTITY)
+    public void deleteMail(@PathVariable(UriDefines.USER_VARIABLE) String username,
+            @PathVariable(UriDefines.MAILBOX_VARIABLE) int mailboxId,
+            @PathVariable(UriDefines.FOLDER_VARIABLE) String folderName, @PathVariable
             int messageId)
             throws Exception {
         Mailbox mailbox = getMailbox(username, mailboxId);

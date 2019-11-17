@@ -4,7 +4,6 @@ import ikpi63holding.postclient.data.user.User;
 import ikpi63holding.postclient.data.user.UserRepository;
 import java.util.List;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 public abstract class AbstractUserController extends AbstractDataController {
@@ -19,7 +18,7 @@ public abstract class AbstractUserController extends AbstractDataController {
      * @param username name to search by
      * @return user
      */
-    public User findUser(@PathVariable String username) {
+    public User findUser(String username) {
         return getUser(username);
     }
 

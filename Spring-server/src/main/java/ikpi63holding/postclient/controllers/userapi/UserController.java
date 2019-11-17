@@ -1,6 +1,7 @@
 package ikpi63holding.postclient.controllers.userapi;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import ikpi63holding.postclient.UriDefines;
 import ikpi63holding.postclient.controllers.abstractapi.AbstractUserController;
 import ikpi63holding.postclient.data.View;
 import ikpi63holding.postclient.data.user.User;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(UriDefines.USER_API)
 public class UserController extends AbstractUserController {
 
     @Autowired
@@ -29,15 +30,15 @@ public class UserController extends AbstractUserController {
     }
 
     @Override
-    @GetMapping("/{username}")
+    @GetMapping(UriDefines.USER_ENTITY)
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.User.class)
-    public User findUser(@PathVariable String username) {
+    public User findUser(@PathVariable(UriDefines.USER_VARIABLE) String username) {
         return super.findUser(username);
     }
 
     @Override
-    @GetMapping("/")
+    @GetMapping(UriDefines.USER_COLLECTION)
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.Compact.class)
     public List<User> getAll() {
@@ -45,7 +46,7 @@ public class UserController extends AbstractUserController {
     }
 
     @Override
-    @PostMapping("/")
+    @PostMapping(UriDefines.USER_COLLECTION)
     @ResponseStatus(HttpStatus.CREATED)
     @JsonView(View.NewUser.class)
     public User newUser(@RequestBody User newUser) {
@@ -53,24 +54,25 @@ public class UserController extends AbstractUserController {
     }
 
     @Override
-    @PutMapping("/{username}")
+    @PutMapping(UriDefines.USER_ENTITY)
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.NewUser.class)
-    public User replaceUser(@RequestBody User newUser, @PathVariable String username) {
+    public User replaceUser(@RequestBody User newUser,
+            @PathVariable(UriDefines.USER_VARIABLE) String username) {
         return super.replaceUser(newUser, username);
     }
 
     @Override
-    @DeleteMapping("/")
+    @DeleteMapping(UriDefines.USER_COLLECTION)
     @ResponseStatus(HttpStatus.OK)
     public void deleteAllUsers() {
         super.deleteAllUsers();
     }
 
     @Override
-    @DeleteMapping("/{username}")
+    @DeleteMapping(UriDefines.USER_ENTITY)
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable String username) {
+    public void deleteUser(@PathVariable(UriDefines.USER_VARIABLE) String username) {
         super.deleteUser(username);
     }
 

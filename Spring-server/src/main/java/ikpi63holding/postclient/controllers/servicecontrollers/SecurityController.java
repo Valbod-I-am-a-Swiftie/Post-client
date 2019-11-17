@@ -1,6 +1,7 @@
 package ikpi63holding.postclient.controllers.servicecontrollers;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import ikpi63holding.postclient.UriDefines;
 import ikpi63holding.postclient.controllers.abstractapi.AbstractDataController;
 import ikpi63holding.postclient.data.View;
 import ikpi63holding.postclient.data.user.User;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping(UriDefines.ROOT)
 @Profile("!nojwt")
 public class SecurityController extends AbstractDataController {
 
@@ -27,7 +28,7 @@ public class SecurityController extends AbstractDataController {
         super(userRepository);
     }
 
-    @PostMapping("/registration")
+    @PostMapping(UriDefines.REGISTRATION)
     @ResponseStatus(HttpStatus.CREATED)
     @JsonView(View.NewUser.class)
     User registration(@RequestBody User newUser) {

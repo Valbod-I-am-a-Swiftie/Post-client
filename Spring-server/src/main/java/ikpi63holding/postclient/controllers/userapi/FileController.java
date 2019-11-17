@@ -1,5 +1,6 @@
 package ikpi63holding.postclient.controllers.userapi;
 
+import ikpi63holding.postclient.UriDefines;
 import ikpi63holding.postclient.controllers.abstractapi.AbstractMailServiceController;
 import ikpi63holding.postclient.data.user.UserRepository;
 import ikpi63holding.postclient.mail.MailServiceFactory;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(UriDefines.USER_API)
 public class FileController extends AbstractMailServiceController {
 
     @Autowired
@@ -31,12 +32,14 @@ public class FileController extends AbstractMailServiceController {
         super(userRepository, mailServiceFactory);
     }
 
-    @GetMapping("/{username}/mailboxes/{mailboxId}/"
-            + "folders/{folder}/messages/{messageId}/files/{filename}")
+    @GetMapping(UriDefines.FILE_ENTITY)
     @ResponseBody
-    protected ResponseEntity<InputStreamResource> serveFile(@PathVariable String username,
-            @PathVariable int mailboxId,
-            @PathVariable String folder, @PathVariable int messageId, @PathVariable String filename)
+    protected ResponseEntity<InputStreamResource> serveFile(
+            @PathVariable(UriDefines.USER_VARIABLE) String username,
+            @PathVariable(UriDefines.MAILBOX_VARIABLE) int mailboxId,
+            @PathVariable(UriDefines.FOLDER_VARIABLE) String folder,
+            @PathVariable(UriDefines.MESSAGE_VARIABLE) int messageId,
+            @PathVariable(UriDefines.FILE_VARIABLE) String filename)
             throws Exception {
         MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, filename);
         var mailbox = getMailbox(username, mailboxId);
