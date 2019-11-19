@@ -1,0 +1,65 @@
+plugins {
+    id "com.moowork.node" version "1.3.1"
+}
+
+apply plugin: 'base'
+apply plugin: 'java'
+
+compileJava.enabled = false
+processResources.enabled = false
+classes.enabled = false
+jar.enabled = false
+
+
+node {
+    version = '12.5.0'
+    npmVersion = '6.9.0'
+    download = true
+}
+
+
+task npm_build(type: NpmTask, dependsOn: npmInstall){    
+    args = ['run', 'build']
+
+    inputs.files fileTree("src")
+
+    inputs.file 'webpack.config.js'
+    inputs.file 'package.json'
+    inputs.file 'package-lock.json'
+
+    outputs.dir 'build'
+}
+
+sourceSets {
+    main {
+        output.dir('build', builtBy: npm_build)
+    }
+}
+assemble.dependsOn npm_build
+
+
+
+// task npm_dev(type: NpmTask, dependsOn: npmInstall){
+//     args = ['run', 'dev']
+// }
+
+//used to setup this thing, use to add dependancies only
+task npm_dependancies_prod(type: NpmTask, dependsOn: npmSetup){
+    args = ['i', '-P', 'vue', 'vue-router']
+}
+
+task npm_dependancies_dev(type: NpmTask, dependsOn: npmSetup){
+    args = ["i", "-D",
+     "@babel/cli", "@babel/core", "@babel/preset-env",
+      "babel-loader", "webpack", "webpack-cli",
+       "html-webpack-plugin", "vue-loader", "vue-template-compiler",
+        "css-loader", "vue-style-loader", "file-loader"]
+}
+
+task npm_dependancies(type: NpmTask, dependsOn: [npm_dependancies_dev, npm_dependancies_prod]){
+
+}
+
+task npm_init(type: NpmTask, dependsOn: npmSetup){
+    args = ["init", "--y"]
+}
