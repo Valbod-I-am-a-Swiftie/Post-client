@@ -1,20 +1,9 @@
-// task copyWebApp(type: Copy) {
-//      from 'web-app/build'
-//      into 'Spribg/server/build/resources/main/public'
-//      include '**/*.html', '**/*.css' , '**/*.js'
-// }
-
-// task build{
-//     project(':web-app'){
-//         task('build')
-//     }
-//     task('copyWebApp')
-//     project(':Spring-server'){
-//         task('build')
-//     }
-// }
-
-
+/*
+ * This copytask is to
+ * support reloading pages
+ * hot in bootRun
+ * @Max
+ */
 task copyWebApp(type: Copy) {
         from 'web-app/build'
         into 'Spring-server/build/resources/main/public'

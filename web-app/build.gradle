@@ -1,10 +1,14 @@
 plugins {
     id "com.moowork.node" version "1.3.1"
+    id 'java'
 }
 
-apply plugin: 'base'
-apply plugin: 'java'
-
+/* 
+ * Disabling all java tasks, 
+ * since we only need java plugin
+ * for sourcesets that are easy to setup
+ * @Max
+ */
 compileJava.enabled = false
 processResources.enabled = false
 classes.enabled = false
@@ -17,7 +21,10 @@ node {
     download = true
 }
 
-
+/* 
+ * Main build task
+ * @Max
+ */
 task npm_build(type: NpmTask, dependsOn: npmInstall){    
     args = ['run', 'build']
 
@@ -30,20 +37,25 @@ task npm_build(type: NpmTask, dependsOn: npmInstall){
     outputs.dir 'build'
 }
 
+/*
+ * This is required for a workaroud
+ * to resolve gradle dependancies
+ * with actual effect
+ * @Max
+ */
 sourceSets {
     main {
         output.dir('build', builtBy: npm_build)
     }
 }
+
 assemble.dependsOn npm_build
 
-
-
-// task npm_dev(type: NpmTask, dependsOn: npmInstall){
-//     args = ['run', 'dev']
-// }
-
-//used to setup this thing, use to add dependancies only
+/*
+ * Next tasks are used to setup this thing,
+ * use to add dependancies only
+ * @Max
+ */
 task npm_dependancies_prod(type: NpmTask, dependsOn: npmSetup){
     args = ['i', '-P', 'vue', 'vue-router']
 }
