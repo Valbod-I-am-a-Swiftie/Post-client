@@ -1,5 +1,5 @@
 include 'web-app'
-include 'Spring-server'
+include 'spring-server'
 
 rootProject.name = 'Post-client'
 

@@ -6,11 +6,11 @@
  */
 task copyWebApp(type: Copy) {
         from 'web-app/build'
-        into 'Spring-server/build/resources/main/public'
+        into 'spring-server/build/resources/main/public'
         //include '**/*.html', '**/*.css' , '**/*.js'
     }
 
-project(':Spring-server') {
+project(':spring-server') {
     apply plugin: 'java'    
 
     processResources.dependsOn rootProject.copyWebApp
