@@ -1,0 +1,6 @@
+include 'web-app'
+include 'Spring-server'
+
+rootProject.name = 'Post-client'
+
+

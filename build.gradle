@@ -1,0 +1,32 @@
+// task copyWebApp(type: Copy) {
+//      from 'web-app/build'
+//      into 'Spribg/server/build/resources/main/public'
+//      include '**/*.html', '**/*.css' , '**/*.js'
+// }
+
+// task build{
+//     project(':web-app'){
+//         task('build')
+//     }
+//     task('copyWebApp')
+//     project(':Spring-server'){
+//         task('build')
+//     }
+// }
+
+
+task copyWebApp(type: Copy) {
+        from 'web-app/build'
+        into 'Spring-server/build/resources/main/public'
+        //include '**/*.html', '**/*.css' , '**/*.js'
+    }
+
+project(':Spring-server') {
+    apply plugin: 'java'    
+
+    processResources.dependsOn rootProject.copyWebApp
+
+    dependencies {
+        compile project(':web-app')
+    }
+}
