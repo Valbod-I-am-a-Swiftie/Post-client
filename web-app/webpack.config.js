@@ -43,7 +43,7 @@ module.exports = {
             showErrors: true,
             cache: true,
             title: 'Vue SPA Webpack',
-            //favicon: join(__dirname, 'logo.png'),
+            //favicon: join(__dirname, 'src/assets', 'logo.png'),
             template: join(__dirname, 'index.html')
         })
     ]    

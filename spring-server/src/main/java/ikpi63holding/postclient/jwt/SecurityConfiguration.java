@@ -50,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .access("hasRole('USER') and " //FUCK THIS LINE
                         + "principal.getUsername().equals(#username)")
                 .antMatchers(HttpMethod.POST, "/login", "/registration").permitAll()
-                .antMatchers("/", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.vue").permitAll()
+                .antMatchers("/", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.vue", "/**/*.png").permitAll()
                 .anyRequest().authenticated();
 
     }

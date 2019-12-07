@@ -1,13 +1,8 @@
-Spring-server/.*
+**/.*
 *.iml
-Spring-server/build/
-Spring-server/lombok.config
-Spring-server/config/*.properties
 *.project
-web-app/.gradle/
-web-app/.settings/
+spring-server/build/
+spring-server/lombok.config
+spring-server/config/*.properties
 web-app/build/
 web-app/node_modules/
-.gradle/
-.idea/
-.settings/
